@@ -136,7 +136,7 @@ $ ->
           window.local = local.createServer config.server, config.server_port, config.local_port, config.password, config.method, 1000 * (config.timeout or 600), '127.0.0.1'
           addServer config.server
           $('#divError').fadeOut()
-          gui.Window.get().hide()
+#          gui.Window.get().hide()
         catch e
           util.log e
       if window.local?
@@ -189,7 +189,7 @@ $ ->
   win = gui.Window.get()
 
   win.on 'minimize', ->
-    this.hide()
+    this.hide() unless os.platform() == 'linux'
 
   win.on 'close', (quit) ->
     if os.platform() == 'darwin' and not quit

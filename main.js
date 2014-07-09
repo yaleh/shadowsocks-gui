@@ -139,8 +139,7 @@
             util.log('Starting shadowsocks...');
             window.local = local.createServer(config.server, config.server_port, config.local_port, config.password, config.method, 1000 * (config.timeout || 600), '127.0.0.1');
             addServer(config.server);
-            $('#divError').fadeOut();
-            return gui.Window.get().hide();
+            return $('#divError').fadeOut();
           } catch (_error) {
             e = _error;
             return util.log(e);
@@ -203,7 +202,9 @@
     window.tray = tray;
     win = gui.Window.get();
     win.on('minimize', function() {
-      return this.hide();
+      if (os.platform() !== 'linux') {
+        return this.hide();
+      }
     });
     win.on('close', function(quit) {
       if (os.platform() === 'darwin' && !quit) {
