@@ -7,3 +7,4 @@ gui-config.json
 *.dll
 *.pak
 .idea
+*~

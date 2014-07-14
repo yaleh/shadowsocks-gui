@@ -1,0 +1,104 @@
+doctype html
+html
+  head
+    title Shadowsocks GUI
+    link(rel='stylesheet', type='text/css', href='css/bootstrap.min.css')
+    style.
+      body {
+        margin: 10px;
+      }
+      .combo .left {
+        width: 173px;
+      }
+      .combo .right {
+        width:  34px;
+      }
+      .alert {
+        margin-bottom: 10px;
+      }
+    script(src='jquery-1.9.0.min.js')
+    script(src='bootstrap.min.js')
+  body
+    #divError.alert.alert-error.hide
+      | Please fill in the blanks and click Save.
+    #divWarning.alert.alert-info.hide
+    #divNewVersion.alert.alert-success.hide
+      button.close(type='button', data-dismiss='alert') ×
+      span.msg
+    .form-horizontal
+      .control-group
+        label.control-label(for='inputServerIP') Server IP
+        .controls
+          .input-append.combo
+            input#inputServerIP.left(type='text', data-key='server', autocomplete='off', data-provide='typeahead', placeholder='Server IP')
+            .btn-group
+              button.btn.dropdown-toggle.right(data-toggle='dropdown')
+                span.caret
+              ul#serverIPMenu.dropdown-menu.pull-right
+                li.server
+                  a(tabindex='-1', href='#')
+                    i.icon-ok
+                    | 123.123.123.123:8388
+                li.server
+                  a(tabindex='-1', href='#')
+                    i.icon-not-ok
+                    | 123.123.123.123:8388
+                li.fixed.insert-point.divider
+                li.fixed
+                  a#buttonPublicServer(tabindex='-1', href='#')
+                    i.icon-globe
+                    | Use Public Server
+                li.fixed.divider
+                li.fixed
+                  a#buttonNewProfile(tabindex='-1', href='#')
+                    i.icon-plus
+                    | Create A New Profile
+                li.fixed
+                  a#buttonDeleteProfile(tabindex='-1', href='#')
+                    i.icon-trash
+                    | Delete Current Profile
+      .control-group
+        label.control-label(for='inputServerPort') Server Port
+        .controls
+          input#inputServerPort(type='text', data-key='server_port', placeholder='Server Port')
+      .control-group
+        label.control-label(for='inputPassword') Password
+        .controls
+          input#inputPassword(type='password', data-key='password', placeholder='Password')
+      .control-group
+        label.control-label(for='inputLocalPort') SOCKS 5 Proxy Port
+        .controls
+          input#inputLocalPort(type='text', data-key='local_port', placeholder='Local Port', value='1080')
+      .control-group
+        label.control-label(for='selectMethod') Encryption Method
+        .controls
+          select#selectMethod(data-key='method')
+            option(value='table', selected='selected') Table (Default)
+            option(value='aes-256-cfb') AES-256-CFB
+            option(value='aes-192-cfb') AES-192-CFB
+            option(value='aes-128-cfb') AES-128-CFB
+            option(value='bf-cfb') BF-CFB (Blowfish)
+            option(value='camellia-256-cfb') CAMELLIA-256-CFB
+            option(value='camellia-192-cfb') CAMELLIA-192-CFB
+            option(value='camellia-128-cfb') CAMELLIA-128-CFB
+            option(value='cast5-cfb') CAST5-cfb
+            option(value='des-cfb') DES-CFB
+            option(value='idea-cfb') IDEA-CFB
+            option(value='rc2-cfb') RC2-CFB
+            option(value='rc4') RC4
+            option(value='seed-cfb') SEED-CFB
+      .control-group
+        label.control-label(for='inputTimeout') Timeout in Second
+        .controls
+          input#inputTimeout(type='number', data-key='timeout', placeholder='Timeout', value='600', min='10')
+      .control-group
+        .controls
+          button#buttonSave.btn.btn-primary
+            i.icon-ok.icon-white
+            | Save
+          button#buttonConsole.btn.btn-info
+            i.icon-wrench.icon-white
+            | Debug
+          button#buttonAbout.btn
+            i.icon-info-sign
+    script(src='main.js')
