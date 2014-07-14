@@ -1,30 +1,21 @@
+flour = require 'flour'
+
 {print} = require 'util'
 {spawn} = require 'child_process'
 
+flour.compilers['jade'] = (file, cb) ->
+  jade = require 'jade'
+  file.read (code) ->
+     fn = jade.compile code
+     cb fn()
+
 build_html = () ->
-  jade   = require 'jade'
-  fs     = require 'fs'
-  
-  content = fs.readFileSync('index.jade').toString()
-  buff     = jade.compile content               # create buffer of jade content
-  html     = buff { title: 'async-flow' }       # jade => html
-  filename = 'index.html'    # get file name
-  compiled = fs.writeFileSync filename, html    # save compiled .jade to .html
+  compile 'index.jade', 'index.html'
 
 build = () ->
-  os = require 'os'
-  if os.platform() == 'win32'
-    coffeeCmd = 'coffee.cmd'
-  else
-    coffeeCmd = 'coffee'
-  coffee = spawn coffeeCmd, ['-c', '-o', '.', 'src']
-  coffee.stderr.on 'data', (data) ->
-    process.stderr.write data.toString()
-  coffee.stdout.on 'data', (data) ->
-    print data.toString()
-  coffee.on 'exit', (code) ->
-    if code != 0
-      process.exit code
+  compile 'src/args.coffee', 'args.js'
+  compile 'src/main.coffee', 'main.js'
+  compile 'src/update.coffee', 'update.js'
 
 clean = () ->
   os = require 'os'
