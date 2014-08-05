@@ -1,0 +1,21 @@
+{
+  "name": "shadowsocks-gui",
+  "version": "0.3.1",
+  "homepage": "https://github.com/shadowsocks/shadowsocks-gui",
+  "authors": [
+    "Yale Huang <yale.huang@trantect.com>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "~1.2.21",
+    "bootstrap": "~3.2.0",
+    "typeahead.js": "~0.10.4"
+  }
+}

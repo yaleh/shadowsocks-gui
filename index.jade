@@ -2,7 +2,7 @@ doctype html
 html
   head
     title Shadowsocks GUI
-    link(rel='stylesheet', type='text/css', href='css/bootstrap.min.css')
+    link(rel='stylesheet', type='text/css', href='bower_components/bootstrap/dist/css/bootstrap.min.css')
     style.
       body {
         margin: 10px;
@@ -16,8 +16,9 @@ html
       .alert {
         margin-bottom: 10px;
       }
-    script(src='jquery-1.9.0.min.js')
-    script(src='bootstrap.min.js')
+    script(src='bower_components/jquery/dist/jquery.min.js')
+    script(src='bower_components/bootstrap/dist/js/bootstrap.min.js')
+    script(src='bower_components/typeahead.js/dist/typeahead.bundle.min.js')
   body
     #divError.alert.alert-error.hide
       | Please fill in the blanks and click Save.
@@ -29,8 +30,8 @@ html
       .control-group
         label.control-label(for='inputServerIP') Server IP
         .controls
-          .input-append.combo
-            input#inputServerIP.left(type='text', data-key='server', autocomplete='off', data-provide='typeahead', placeholder='Server IP')
+          .input-group.combo
+            input#inputServerIP.left.form-control(type='text', data-key='server', autocomplete='off', data-provide='typeahead', placeholder='Server IP')
             .btn-group
               button.btn.dropdown-toggle.right(data-toggle='dropdown')
                 span.caret
@@ -60,15 +61,15 @@ html
       .control-group
         label.control-label(for='inputServerPort') Server Port
         .controls
-          input#inputServerPort(type='text', data-key='server_port', placeholder='Server Port')
+          input#inputServerPort.form-control(type='text', data-key='server_port', placeholder='Server Port')
       .control-group
         label.control-label(for='inputPassword') Password
         .controls
-          input#inputPassword(type='password', data-key='password', placeholder='Password')
+          input#inputPassword.form-control(type='password', data-key='password', placeholder='Password')
       .control-group
         label.control-label(for='inputLocalPort') SOCKS 5 Proxy Port
         .controls
-          input#inputLocalPort(type='text', data-key='local_port', placeholder='Local Port', value='1080')
+          input#inputLocalPort.form-control(type='text', data-key='local_port', placeholder='Local Port', value='1080')
       .control-group
         label.control-label(for='selectMethod') Encryption Method
         .controls
@@ -90,7 +91,7 @@ html
       .control-group
         label.control-label(for='inputTimeout') Timeout in Second
         .controls
-          input#inputTimeout(type='number', data-key='timeout', placeholder='Timeout', value='600', min='10')
+          input#inputTimeout.form-control(type='number', data-key='timeout', placeholder='Timeout', value='600', min='10')
       .control-group
         .controls
           button#buttonSave.btn.btn-primary

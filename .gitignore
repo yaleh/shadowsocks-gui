@@ -8,3 +8,5 @@ gui-config.json
 *.pak
 .idea
 *~
+bower_components
+build
