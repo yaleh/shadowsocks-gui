@@ -57,6 +57,11 @@ loadConfigs = ->
     []
 
 allConfigs = ->
+  try
+    localStorage['configs']
+  catch e
+    return []
+    
   if localStorage['configs']
     result = []
     try
@@ -73,8 +78,11 @@ saveIndex = (index) ->
   saveToJSON()
 
 loadIndex = ->
-  +localStorage['index']
- 
+  try
+    return +localStorage['index']
+  catch e
+    return 1
+
 saveConfigs = (configs) ->
   localStorage['configs'] = JSON.stringify(configs)
   saveToJSON()

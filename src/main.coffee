@@ -57,8 +57,8 @@ $ ->
         newServers.push server
     localStorage['server_history'] = newServers.join '|'
   
-#  $('#inputServerIP').typeahead
-#    source: serverHistory
+  $('#inputServerIP').typeahead
+    source: serverHistory
       
   chooseServer = ->
     index = +$(this).attr('data-key')
@@ -81,7 +81,7 @@ $ ->
       menuItem.find('a').click chooseServer
       menuItem.insertBefore(divider, serverMenu)
       i++
-  
+      
   addConfig = ->
     args.saveIndex(NaN)
     reloadServerList()

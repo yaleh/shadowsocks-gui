@@ -17,6 +17,7 @@
     "angular": "~1.2.21",
     "bootstrap": "~3.2.0",
     "typeahead.js": "~0.10.4",
-    "bootstrap-combobox": "~1.1.6"
+    "bootstrap-combobox": "~1.1.6",
+    "bootstrap3-typeahead": "~3.0.3"
   }
 }
