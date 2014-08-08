@@ -32,7 +32,7 @@ $ ->
   util.log = (s) ->
     console.log new Date().toLocaleString() + " - #{s}"
     if not divWarningShown
-      divWarning.show()
+      divWarning.removeClass('hide')
       divWarningShown = true
     divWarning.text(s)
   
@@ -57,9 +57,9 @@ $ ->
         newServers.push server
     localStorage['server_history'] = newServers.join '|'
   
-  $('#inputServerIP').typeahead
-    source: serverHistory
-  
+#  $('#inputServerIP').typeahead
+#    source: serverHistory
+      
   chooseServer = ->
     index = +$(this).attr('data-key')
     args.saveIndex(index)
@@ -152,6 +152,10 @@ $ ->
         start()
     else
       $('#divError').fadeIn()
+
+  $(document).ready ->
+    $(".combobox").combobox()
+    return
   
   $('#buttonSave').on 'click', save
   $('#buttonNewProfile').on 'click', addConfig

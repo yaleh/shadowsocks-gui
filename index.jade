@@ -3,6 +3,7 @@ html
   head
     title Shadowsocks GUI
     link(rel='stylesheet', type='text/css', href='bower_components/bootstrap/dist/css/bootstrap.min.css')
+    link(rel='stylesheet', type='text/css', href='bower_components/bootstrap-combobox/css/bootstrap-combobox.css')
     style.
       body {
         margin: 10px;
@@ -18,7 +19,9 @@ html
       }
     script(src='bower_components/jquery/dist/jquery.min.js')
     script(src='bower_components/bootstrap/dist/js/bootstrap.min.js')
-    script(src='bower_components/typeahead.js/dist/typeahead.bundle.min.js')
+    script(src='bower_components/bootstrap-combobox/js/bootstrap-combobox.js')
+
+    //script(src='bower_components/typeahead.js/dist/typeahead.bundle.min.js')
   body
     #divError.alert.alert-error.hide
       | Please fill in the blanks and click Save.
@@ -26,54 +29,64 @@ html
     #divNewVersion.alert.alert-success.hide
       button.close(type='button', data-dismiss='alert') ×
       span.msg
-    .form-horizontal
-      .control-group
+    form.form-horizontal
+      .form-group.row
+          label.control-label.col-sm-2.col-xs-4 Server IP
+          .col-sm-10.col-xs-8
+            select.combobox.form-control.input-large(name='horizontal', required='required')
+              // option(value='', selected='selected') Select a State
+              option(value='123.123.123.123:8388') 123.123.123.123:8388
+              option(value='AK') Alaska
+              option(value='AZ') Arizona
+
+      // .control-group
+      //
         label.control-label(for='inputServerIP') Server IP
         .controls
-          .input-group.combo
-            input#inputServerIP.left.form-control(type='text', data-key='server', autocomplete='off', data-provide='typeahead', placeholder='Server IP')
-            .btn-group
-              button.btn.dropdown-toggle.right(data-toggle='dropdown')
+          .input-group.input-group
+            input#inputServerIP.form-control(type='text', data-key='server', autocomplete='off', data-provide='typeahead', placeholder='Server IP')
+            .input-group-btn
+              button.btn.btn-default.dropdown-toggle(data-toggle='dropdown', type='button', id='dropdownMenu1')
                 span.caret
-              ul#serverIPMenu.dropdown-menu.pull-right
-                li.server
-                  a(tabindex='-1', href='#')
-                    i.icon-ok
+              ul#serverIPMenu.dropdown-menu-right(role='menu', aria-labelledby='dropdownMenu1')
+                li.server(role="presentation")
+                  a(tabindex='-1', href='#', role="menuitem")
+                    i.glyphicon.glyphicon-ok
                     | 123.123.123.123:8388
-                li.server
-                  a(tabindex='-1', href='#')
-                    i.icon-not-ok
+                li.server(role="presentation")
+                  a(tabindex='-1', href='#', role="menuitem")
+                    i.glyphicon.glyphicon-not-ok
                     | 123.123.123.123:8388
                 li.fixed.insert-point.divider
-                li.fixed
-                  a#buttonPublicServer(tabindex='-1', href='#')
-                    i.icon-globe
+                li.fixed(role="presentation")
+                  a#buttonPublicServer(tabindex='-1', href='#', role="menuitem")
+                    i.glyphicon.glyphicon-globe
                     | Use Public Server
                 li.fixed.divider
-                li.fixed
-                  a#buttonNewProfile(tabindex='-1', href='#')
-                    i.icon-plus
+                li.fixed(role="presentation")
+                  a#buttonNewProfile(tabindex='-1', href='#', role="menuitem")
+                    i.glyphicon.glyphicon-plus
                     | Create A New Profile
-                li.fixed
-                  a#buttonDeleteProfile(tabindex='-1', href='#')
-                    i.icon-trash
+                li.fixed(role="presentation")
+                  a#buttonDeleteProfile(tabindex='-1', href='#', role="menuitem")
+                    i.glyphicon.glyphicon-trash
                     | Delete Current Profile
-      .control-group
-        label.control-label(for='inputServerPort') Server Port
-        .controls
+      .control-group.row
+        label.control-label.col-sm-2.col-xs-4(for='inputServerPort') Server Port
+        .controls.col-sm-10.col-xs-8
           input#inputServerPort.form-control(type='text', data-key='server_port', placeholder='Server Port')
-      .control-group
-        label.control-label(for='inputPassword') Password
-        .controls
+      .control-group.row
+        label.control-label.col-sm-2.col-xs-4(for='inputPassword') Password
+        .controls.col-sm-10.col-xs-8
           input#inputPassword.form-control(type='password', data-key='password', placeholder='Password')
-      .control-group
-        label.control-label(for='inputLocalPort') SOCKS 5 Proxy Port
-        .controls
+      .control-group.row
+        label.control-label.col-sm-2.col-xs-4(for='inputLocalPort') SOCKS 5 Proxy Port
+        .controls.col-sm-10.col-xs-8
           input#inputLocalPort.form-control(type='text', data-key='local_port', placeholder='Local Port', value='1080')
-      .control-group
-        label.control-label(for='selectMethod') Encryption Method
-        .controls
-          select#selectMethod(data-key='method')
+      .control-group.row
+        label.control-label.col-sm-2.col-xs-4(for='selectMethod') Encryption Method
+        .controls.col-sm-10.col-xs-8
+          select#selectMethod.form-control(data-key='method')
             option(value='table', selected='selected') Table (Default)
             option(value='aes-256-cfb') AES-256-CFB
             option(value='aes-192-cfb') AES-192-CFB
@@ -88,18 +101,18 @@ html
             option(value='rc2-cfb') RC2-CFB
             option(value='rc4') RC4
             option(value='seed-cfb') SEED-CFB
-      .control-group
-        label.control-label(for='inputTimeout') Timeout in Second
-        .controls
+      .control-group.row
+        label.control-label.col-sm-2.col-xs-4(for='inputTimeout') Timeout in Second
+        .controls.col-sm-10.col-xs-8
           input#inputTimeout.form-control(type='number', data-key='timeout', placeholder='Timeout', value='600', min='10')
       .control-group
         .controls
           button#buttonSave.btn.btn-primary
-            i.icon-ok.icon-white
+            i.glyphicon.glyphicon-ok.glyphicon-white
             | Save
           button#buttonConsole.btn.btn-info
-            i.icon-wrench.icon-white
+            i.glyphicon.glyphicon-wrench.glyphicon-white
             | Debug
           button#buttonAbout.btn
-            i.icon-info-sign
+            i.glyphicon.glyphicon-info-sign
     script(src='main.js')
