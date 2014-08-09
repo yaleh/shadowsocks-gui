@@ -4,7 +4,6 @@ html
     title Shadowsocks GUI
     link(rel='stylesheet', type='text/css', href='bower_components/bootstrap/dist/css/bootstrap.css')
     link(rel='stylesheet', type='text/css', href='bower_components/bootstrap/dist/css/bootstrap-theme.css')
-    link(rel='stylesheet', type='text/css', href='bower_components/bootstrap-combobox/css/bootstrap-combobox.css')
     style.
       body {
         margin: 10px;
@@ -20,10 +19,8 @@ html
       }
     script(src='bower_components/jquery/dist/jquery.min.js')
     script(src='bower_components/bootstrap/dist/js/bootstrap.min.js')
-    script(src='bower_components/bootstrap-combobox/js/bootstrap-combobox.js')
     script(src='bower_components/bootstrap3-typeahead/bootstrap3-typeahead.min.js')
 
-    //script(src='bower_components/typeahead.js/dist/typeahead.bundle.min.js')
   body
     #divError.alert.alert-error.hide
       | Please fill in the blanks and click Save.
@@ -33,16 +30,6 @@ html
       span.msg
 
     form.form-horizontal(role="form")
-
-      //.form-group.row
-      //
-        label.control-label.col-sm-2.col-xs-5 Server IP
-        .col-sm-10.col-xs-7
-          select.combobox.form-control.input-large(name='horizontal', required='required')
-            // option(value='', selected='selected') Select a State
-            option(value='123.123.123.123:8388') 123.123.123.123:8388
-            option(value='AK') Alaska
-            option(value='AZ') Arizona
 
       .form-group.row
         label.control-label.col-sm-2.col-xs-5(for='inputServerIP') Server IP
@@ -87,7 +74,7 @@ html
           input#inputPassword.form-control(type='password', data-key='password', placeholder='Password')
 
       .form-group.row
-        label.control-label.col-sm-2.col-xs-5(for='inputLocalPort') SOCKS 5 Proxy Port
+        label.control-label.col-sm-2.col-xs-5(for='inputLocalPort') SOCKS5 Proxy Port
         .controls.col-sm-10.col-xs-7
           input#inputLocalPort.form-control(type='text', data-key='local_port', placeholder='Local Port', value='1080')
 
@@ -115,11 +102,9 @@ html
         .controls.col-sm-10.col-xs-7
           input#inputTimeout.form-control(type='number', data-key='timeout', placeholder='Timeout', value='600', min='10')
 
-      br
-
       //.control-group
         //.controls
-      p
+      .btn-group.pull-right
         button#buttonSave.btn.btn-primary
           i.glyphicon.glyphicon-ok.glyphicon-white
           | Save

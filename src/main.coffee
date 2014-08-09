@@ -1,4 +1,4 @@
-# Copyright (c) 2014 clowwindy
+# Copyright (c) 2014 clowwindy, Yale Huang
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -152,10 +152,6 @@ $ ->
         start()
     else
       $('#divError').fadeIn()
-
-  $(document).ready ->
-    $(".combobox").combobox()
-    return
   
   $('#buttonSave').on 'click', save
   $('#buttonNewProfile').on 'click', addConfig
@@ -200,6 +196,8 @@ $ ->
         this.hide()
     else
       this.close true
+
+  win.setResizable(true)
 
   reloadServerList()
   load true
