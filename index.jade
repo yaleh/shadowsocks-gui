@@ -30,11 +30,11 @@ html
       span.msg
 
     form.form-horizontal(role="form")
+      .row
 
-      .form-group.row
-        label.control-label.col-sm-2.col-xs-5(for='inputServerIP') Server IP
-        .controls.col-sm-10.col-xs-7
+        .col-sm-7.col-xs-7
           .input-group
+            span.input-group-addon Server IP
             input#inputServerIP.form-control(type='text', data-key='server', autocomplete='off', data-provide='typeahead', placeholder='Server IP')
             .input-group-btn
               button.btn.btn-default.dropdown-toggle(data-toggle='dropdown', type='button', id='dropdownMenu1')
@@ -63,56 +63,59 @@ html
                     i.glyphicon.glyphicon-trash
                     | Delete Current Profile
 
-      .form-group.row
-        label.control-label.col-sm-2.col-xs-5(for='inputServerPort') Server Port
-        .controls.col-sm-10.col-xs-7
-          input#inputServerPort.form-control(type='text', data-key='server_port', placeholder='Server Port')
+        .col-sm-5.col-xs-5
+          .input-group
+            span.input-group-addon Server Port
+            input#inputServerPort.form-control(type='text', data-key='server_port', placeholder='Server Port')
 
-      .form-group.row
-        label.control-label.col-sm-2.col-xs-5(for='inputPassword') Password
-        .controls.col-sm-10.col-xs-7
-          input#inputPassword.form-control(type='password', data-key='password', placeholder='Password')
+      br
 
-      .form-group.row
-        label.control-label.col-sm-2.col-xs-5(for='inputLocalPort') SOCKS5 Proxy Port
-        .controls.col-sm-10.col-xs-7
-          input#inputLocalPort.form-control(type='text', data-key='local_port', placeholder='Local Port', value='1080')
-
-      .form-group.row
-        label.control-label.col-sm-2.col-xs-5(for='selectMethod') Encryption Method
-        .controls.col-sm-10.col-xs-7
-          select#selectMethod.form-control(data-key='method')
-            option(value='table', selected='selected') Table (Default)
-            option(value='aes-256-cfb') AES-256-CFB
-            option(value='aes-192-cfb') AES-192-CFB
-            option(value='aes-128-cfb') AES-128-CFB
-            option(value='bf-cfb') BF-CFB (Blowfish)
-            option(value='camellia-256-cfb') CAMELLIA-256-CFB
-            option(value='camellia-192-cfb') CAMELLIA-192-CFB
-            option(value='camellia-128-cfb') CAMELLIA-128-CFB
-            option(value='cast5-cfb') CAST5-cfb
-            option(value='des-cfb') DES-CFB
-            option(value='idea-cfb') IDEA-CFB
-            option(value='rc2-cfb') RC2-CFB
-            option(value='rc4') RC4
-            option(value='seed-cfb') SEED-CFB
-
-      .form-group.row
-        label.control-label.col-sm-2.col-xs-5(for='inputTimeout') Timeout in Second
-        .controls.col-sm-10.col-xs-7
-          input#inputTimeout.form-control(type='number', data-key='timeout', placeholder='Timeout', value='600', min='10')
-
-      //.control-group
-        //.controls
       .row
-        .col-xs-5
-        .btn-group.col-xs-7
-          button#buttonSave.btn.btn-primary
-            i.glyphicon.glyphicon-ok.glyphicon-white
-            | Save
-          button#buttonConsole.btn.btn-info
-            i.glyphicon.glyphicon-wrench.glyphicon-white
-            | Debug
-          button#buttonAbout.btn
-            i.glyphicon.glyphicon-info-sign
+        .col-sm-6.col-xs-6
+          .input-group
+            span.input-group-addon Password
+            input#inputPassword.form-control(type='password', data-key='password', placeholder='Password')
+
+        .col-sm-6.col-xs-6
+          .input-group
+            span.input-group-addon SOCKS5 Proxy Port
+            input#inputLocalPort.form-control(type='text', data-key='local_port', placeholder='Local Port', value='1080')
+
+      br
+
+      .input-group
+        span.input-group-addon Encryption Method
+        select#selectMethod.form-control(data-key='method')
+          option(value='table', selected='selected') Table (Default)
+          option(value='aes-256-cfb') AES-256-CFB
+          option(value='aes-192-cfb') AES-192-CFB
+          option(value='aes-128-cfb') AES-128-CFB
+          option(value='bf-cfb') BF-CFB (Blowfish)
+          option(value='camellia-256-cfb') CAMELLIA-256-CFB
+          option(value='camellia-192-cfb') CAMELLIA-192-CFB
+          option(value='camellia-128-cfb') CAMELLIA-128-CFB
+          option(value='cast5-cfb') CAST5-cfb
+          option(value='des-cfb') DES-CFB
+          option(value='idea-cfb') IDEA-CFB
+          option(value='rc2-cfb') RC2-CFB
+          option(value='rc4') RC4
+          option(value='seed-cfb') SEED-CFB
+
+      br
+
+      .input-group
+        span.input-group-addon Timeout in Second
+        input#inputTimeout.form-control(type='number', data-key='timeout', placeholder='Timeout', value='600', min='10')
+
+      br
+
+      .btn-group.pull-right
+        button#buttonSave.btn.btn-primary
+          i.glyphicon.glyphicon-ok.glyphicon-white
+          | Save
+        button#buttonConsole.btn.btn-info
+          i.glyphicon.glyphicon-wrench.glyphicon-white
+          | Debug
+        button#buttonAbout.btn
+          i.glyphicon.glyphicon-info-sign
     script(src='main.js')
