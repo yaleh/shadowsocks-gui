@@ -5,119 +5,148 @@ html
     link(rel='stylesheet', type='text/css', href='bower_components/bootstrap/dist/css/bootstrap.css')
     link(rel='stylesheet', type='text/css', href='bower_components/bootstrap/dist/css/bootstrap-theme.css')
     style.
+
+      
+      html,
       body {
-        margin: 10px;
+      height: 100%;
+      /* The html and body elements cannot have any padding or margin. */
+      overflow:hidden;
       }
-      .combo .left {
-        width: 173px;
+      /* Wrapper for page content to push down footer */
+      #wrap {
+      min-height: 100%;
+      height: auto !important;
+      height: 100%;
+      /* Negative indent footer by its height */
+      margin: 10px 10px -30px;
       }
-      .combo .right {
-        width:  34px;
+      /* Set the fixed height of the footer here */
+      #push,
+      #footer {
+      height: 30px;
       }
-      .alert {
-        margin-bottom: 10px;
+      //#footer {
+      //background-color: #f5f5f5;
+      //}
+      /* Lastly, apply responsive CSS fixes as necessary */
+      @media (max-width: 767px) {
+      #footer {
+      margin-left: -20px;
+      margin-right: -20px;
+      padding-left: 30px;
+      padding-right: 30px;
       }
+      }
+
     script(src='bower_components/jquery/dist/jquery.min.js')
     script(src='bower_components/bootstrap/dist/js/bootstrap.min.js')
     script(src='bower_components/bootstrap3-typeahead/bootstrap3-typeahead.min.js')
 
   body
-    #divError.alert.alert-error.hide
-      | Please fill in the blanks and click Save.
-    #divWarning.alert.alert-info.hide
-    #divNewVersion.alert.alert-success.hide
-      button.close(type='button', data-dismiss='alert') ×
-      span.msg
 
-    form.form-horizontal(role="form")
-      .row
+    #wrap
+      form.form-horizontal(role="form")
+        .row
 
-        .col-sm-7.col-xs-7
-          .input-group
-            span.input-group-addon Server IP
-            input#inputServerIP.form-control(type='text', data-key='server', autocomplete='off', data-provide='typeahead', placeholder='Server IP')
-            .input-group-btn
-              button.btn.btn-default.dropdown-toggle(data-toggle='dropdown', type='button', id='dropdownMenu1')
-                span.caret
-              ul#serverIPMenu.dropdown-menu.dropdown-menu-right(role='menu', aria-labelledby='dropdownMenu1')
-                li.server(role="presentation")
-                  a(tabindex='-1', href='#', role="menuitem")
-                    i.glyphicon.glyphicon-ok
-                    | 123.123.123.123:8388
-                li.server(role="presentation")
-                  a(tabindex='-1', href='#', role="menuitem")
-                    i.glyphicon.glyphicon-not-ok
-                    | 123.123.123.123:8388
-                li.fixed.insert-point.divider
-                li.fixed(role="presentation")
-                  a#buttonPublicServer(tabindex='-1', href='#', role="menuitem")
-                    i.glyphicon.glyphicon-globe
-                    | Use Public Server
-                li.fixed.divider
-                li.fixed(role="presentation")
-                  a#buttonNewProfile(tabindex='-1', href='#', role="menuitem")
-                    i.glyphicon.glyphicon-plus
-                    | Create A New Profile
-                li.fixed(role="presentation")
-                  a#buttonDeleteProfile(tabindex='-1', href='#', role="menuitem")
-                    i.glyphicon.glyphicon-trash
-                    | Delete Current Profile
+          .col-sm-7.col-xs-7
+            .input-group
+              span.input-group-addon Server IP
+              input#inputServerIP.form-control(type='text', data-key='server', autocomplete='off', data-provide='typeahead', placeholder='Server IP')
+              .input-group-btn
+                button.btn.btn-default.dropdown-toggle(data-toggle='dropdown', type='button', id='dropdownMenu1')
+                  span.caret
+                ul#serverIPMenu.dropdown-menu.dropdown-menu-right(role='menu', aria-labelledby='dropdownMenu1')
+                  li.server(role="presentation")
+                    a(tabindex='-1', href='#', role="menuitem")
+                      i.glyphicon.glyphicon-ok
+                      | 123.123.123.123:8388
+                  li.server(role="presentation")
+                    a(tabindex='-1', href='#', role="menuitem")
+                      i.glyphicon.glyphicon-not-ok
+                      | 123.123.123.123:8388
+                  li.fixed.insert-point.divider
+                  li.fixed(role="presentation")
+                    a#buttonPublicServer(tabindex='-1', href='#', role="menuitem")
+                      i.glyphicon.glyphicon-globe
+                      | Use Public Server
+                  li.fixed.divider
+                  li.fixed(role="presentation")
+                    a#buttonNewProfile(tabindex='-1', href='#', role="menuitem")
+                      i.glyphicon.glyphicon-plus
+                      | Create A New Profile
+                  li.fixed(role="presentation")
+                    a#buttonDeleteProfile(tabindex='-1', href='#', role="menuitem")
+                      i.glyphicon.glyphicon-trash
+                      | Delete Current Profile
 
-        .col-sm-5.col-xs-5
-          .input-group
-            span.input-group-addon Server Port
-            input#inputServerPort.form-control(type='text', data-key='server_port', placeholder='Server Port')
+          .col-sm-5.col-xs-5
+            .input-group
+              span.input-group-addon Server Port
+              input#inputServerPort.form-control(type='text', data-key='server_port', placeholder='Server Port')
+
+        br
+
+        .row
+          .col-sm-6.col-xs-6
+            .input-group
+              span.input-group-addon Password
+              input#inputPassword.form-control(type='password', data-key='password', placeholder='Password')
+
+          .col-sm-6.col-xs-6
+            .input-group
+              span.input-group-addon SOCKS5 Proxy Port
+              input#inputLocalPort.form-control(type='text', data-key='local_port', placeholder='Local Port', value='1080')
+
+        br
+
+        .row
+          .col-sm-6.col-xs-6
+            .input-group
+              span.input-group-addon Enc Method
+              select#selectMethod.form-control(data-key='method')
+                option(value='table', selected='selected') Table (Default)
+                option(value='aes-256-cfb') AES-256-CFB
+                option(value='aes-192-cfb') AES-192-CFB
+                option(value='aes-128-cfb') AES-128-CFB
+                option(value='bf-cfb') BF-CFB (Blowfish)
+                option(value='camellia-256-cfb') CAMELLIA-256-CFB
+                option(value='camellia-192-cfb') CAMELLIA-192-CFB
+                option(value='camellia-128-cfb') CAMELLIA-128-CFB
+                option(value='cast5-cfb') CAST5-cfb
+                option(value='des-cfb') DES-CFB
+                option(value='idea-cfb') IDEA-CFB
+                option(value='rc2-cfb') RC2-CFB
+                option(value='rc4') RC4
+                option(value='seed-cfb') SEED-CFB
+
+          .col-sm-6.col-xs-6
+            .input-group
+              span.input-group-addon Timeout in Sec
+              input#inputTimeout.form-control(type='number', data-key='timeout', placeholder='Timeout', value='600', min='10')
+
+        br
+
+        .btn-group.pull-right
+          button#buttonSave.btn.btn-primary
+            i.glyphicon.glyphicon-ok.glyphicon-white
+            | Save
+          button#buttonConsole.btn.btn-info
+            i.glyphicon.glyphicon-wrench.glyphicon-white
+            | Debug
+          button#buttonAbout.btn
+            i.glyphicon.glyphicon-info-sign
+
+        br
 
       br
 
-      .row
-        .col-sm-6.col-xs-6
-          .input-group
-            span.input-group-addon Password
-            input#inputPassword.form-control(type='password', data-key='password', placeholder='Password')
-
-        .col-sm-6.col-xs-6
-          .input-group
-            span.input-group-addon SOCKS5 Proxy Port
-            input#inputLocalPort.form-control(type='text', data-key='local_port', placeholder='Local Port', value='1080')
-
-      br
-
-      .row
-        .col-sm-6.col-xs-6
-          .input-group
-            span.input-group-addon Enc Method
-            select#selectMethod.form-control(data-key='method')
-              option(value='table', selected='selected') Table (Default)
-              option(value='aes-256-cfb') AES-256-CFB
-              option(value='aes-192-cfb') AES-192-CFB
-              option(value='aes-128-cfb') AES-128-CFB
-              option(value='bf-cfb') BF-CFB (Blowfish)
-              option(value='camellia-256-cfb') CAMELLIA-256-CFB
-              option(value='camellia-192-cfb') CAMELLIA-192-CFB
-              option(value='camellia-128-cfb') CAMELLIA-128-CFB
-              option(value='cast5-cfb') CAST5-cfb
-              option(value='des-cfb') DES-CFB
-              option(value='idea-cfb') IDEA-CFB
-              option(value='rc2-cfb') RC2-CFB
-              option(value='rc4') RC4
-              option(value='seed-cfb') SEED-CFB
-
-        .col-sm-6.col-xs-6
-          .input-group
-            span.input-group-addon Timeout in Sec
-            input#inputTimeout.form-control(type='number', data-key='timeout', placeholder='Timeout', value='600', min='10')
-
-      br
-
-      .btn-group.pull-right
-        button#buttonSave.btn.btn-primary
-          i.glyphicon.glyphicon-ok.glyphicon-white
-          | Save
-        button#buttonConsole.btn.btn-info
-          i.glyphicon.glyphicon-wrench.glyphicon-white
-          | Debug
-        button#buttonAbout.btn
-          i.glyphicon.glyphicon-info-sign
+    #footer.bg-primary
+      #divError.bg-primary.hide
+        | Please fill in the blanks and click Save.
+      #divWarning.bg-primary.hide
+      #divNewVersion.bg-primary.hide
+        button.close(type='button', data-dismiss='alert') ×
+        span.msg
 
     script(src='main.js')
