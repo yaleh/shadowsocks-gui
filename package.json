@@ -18,12 +18,13 @@
     "icon": "icon.png",
     "toolbar": false,
     "width": 500,
-    "height": 450,
+    "height": 250,
     "position": "mouse",
-    "min_width": 500,
-    "min_height": 450,
-    "max_width": 500,
-    "max_height": 450
+//    "min_width": 500,
+//    "min_height": 450,
+//    "max_width": 500,
+//    "max_height": 450,
+    "resizable": true
   },
   "js-flags": "--expose-gc",
   "licenses": [
