@@ -4,6 +4,45 @@ util = require 'util'
 fs = require 'fs'
 guiconfigFilename = fs.realpathSync(process.execPath + '/..') + '/gui-config.json'
 
+class ServerConfig
+  constructor: (@server, @server_port, @local_port, @password,
+                @method, @timeout) ->
+
+class Configs
+  defaultConfig =
+    server_port: 8388
+    local_port: 1080
+    method: 'aes-256-cfb'
+    timeout: 600
+
+  constructor: ->
+    @configs = []
+    @activeConfigIndex = 1
+
+  loadFromJSON: ->
+
+  saveToJSON: ->
+
+  getConfig: (n) ->
+    return @configs[n]
+
+  setConfig: (n, config) ->
+    @configs[n] = config
+
+  getActiveConfigIndex: ->
+    return @activeConfigIndex
+
+  setActiveConfigIndex: (n) ->
+    @activeConfigIndex = n
+
+  getActiveConfig: ->
+    return @configs[@getActiveConfigIndex()]
+
+  deleteConfig: (n) ->
+    if (not isNaN(n)) and not (n == -1)
+      @configs.splice n,1
+      # saveConfigs configs
+
 loadFromJSON = ->
   # Windows users are happy to see a config file within their shadowsocks-gui folder
   if process.platform == 'win32'
@@ -19,7 +58,7 @@ loadFromJSON = ->
       console.log e
 
 loadFromJSON()
-        
+
 saveToJSON = ->
   if process.platform == 'win32'
     util.log 'saving config file'
@@ -41,7 +80,7 @@ publicConfig =
   password: '$#HAL9000!'
   method: 'aes-256-cfb'
   timeout: 600
-  
+
 defaultConfig =
   server_port: 8388
   local_port: 1080
@@ -61,7 +100,7 @@ allConfigs = ->
     localStorage['configs']
   catch e
     return []
-    
+
   if localStorage['configs']
     result = []
     try
@@ -72,7 +111,7 @@ allConfigs = ->
       return result
     catch e
   []
-  
+
 saveIndex = (index) ->
   localStorage['index'] = index
   saveToJSON()
@@ -107,7 +146,7 @@ loadConfig = (index) ->
     return publicConfig
   configs = loadConfigs()
   return configs[index] or defaultConfig
-      
+
 deleteConfig = (index) ->
   if (not isNaN(index)) and not (index == -1)
     configs = loadConfigs()

@@ -21,13 +21,14 @@
 $ ->
   os = require 'os'
   gui = require 'nw.gui'
+  npm_args = require 'args'
   # hack util.log
-  
+
   divWarning = $('#divWarning')
   divWarningShown = false
   serverHistory = ->
     (localStorage['server_history'] || '').split('|')
-   
+
   util = require 'util'
   util.log = (s) ->
     console.log new Date().toLocaleString() + " - #{s}"
@@ -35,11 +36,11 @@ $ ->
       divWarning.removeClass('hide')
       divWarningShown = true
     divWarning.text(s)
-  
+
   args = require './args'
   local = require 'shadowsocks'
   update = require './update'
-  
+
   update.checkUpdate (url, version) ->
     divNewVersion = $('#divNewVersion')
     span = $("<span style='cursor:pointer'>New version #{version} found, click here to download</span>")
@@ -47,7 +48,7 @@ $ ->
       gui.Shell.openExternal url
     divNewVersion.find('.msg').append span
     divNewVersion.fadeIn()
-   
+
   addServer = (serverIP) ->
     servers = (localStorage['server_history'] || '').split('|')
     servers.push serverIP
@@ -56,16 +57,16 @@ $ ->
       if server and server not in newServers
         newServers.push server
     localStorage['server_history'] = newServers.join '|'
-  
+
   $('#inputServerIP').typeahead
     source: serverHistory
-      
+
   chooseServer = ->
     index = +$(this).attr('data-key')
     args.saveIndex(index)
     load false
     reloadServerList()
-  
+
   reloadServerList = ->
     currentIndex = args.loadIndex()
     configs = args.allConfigs()
@@ -81,23 +82,23 @@ $ ->
       menuItem.find('a').click chooseServer
       menuItem.insertBefore(divider, serverMenu)
       i++
-      
+
   addConfig = ->
     args.saveIndex(NaN)
     reloadServerList()
     load false
-  
+
   deleteConfig = ->
     args.deleteConfig(args.loadIndex())
     args.saveIndex(NaN)
     reloadServerList()
     load false
-    
+
   publicConfig = ->
     args.saveIndex(-1)
     reloadServerList()
     load false
-  
+
   save = ->
     config = {}
     $('input,select').each ->
@@ -110,7 +111,7 @@ $ ->
     util.log 'config saved'
     restartServer config
     false
-  
+
   load = (restart)->
     config = args.loadConfig(args.loadIndex())
     $('input,select').each ->
@@ -120,9 +121,9 @@ $ ->
       config[key] = this.value
     if restart
       restartServer config
-    
+
   isRestarting = false
-  
+
   restartServer = (config) ->
     if config.server and +config.server_port and config.password and +config.local_port and config.method and +config.timeout
       if isRestarting
@@ -152,7 +153,7 @@ $ ->
         start()
     else
       $('#divError').fadeIn()
-  
+
   $('#buttonSave').on 'click', save
   $('#buttonNewProfile').on 'click', addConfig
   $('#buttonDeleteProfile').on 'click', deleteConfig
@@ -161,25 +162,39 @@ $ ->
     gui.Window.get().showDevTools()
   $('#buttonAbout').on 'click', ->
     gui.Shell.openExternal 'https://github.com/yaleh/shadowsocks-gui'
-  
+
   tray = new gui.Tray icon: 'menu_icon@2x.png'
   menu = new gui.Menu()
-  
+
   tray.on 'click', ->
     gui.Window.get().show()
-  
+
   show = new gui.MenuItem
     type: 'normal'
     label: 'Show'
     click: ->
       gui.Window.get().show()
-  
+
   quit = new gui.MenuItem
     type: 'normal'
     label: 'Quit'
     click: ->
       gui.Window.get().close(true)
-  
+
+  options = npm_args.Options.parse([{
+    name: 'config',
+    shortName: 'c',
+    type: 'string',
+    help: 'config file'
+  }])
+
+  console.log(options.getHelp())
+
+  # npm_args requires two faked parameters at the beginning of argv
+  parsed = npm_args.parser([].concat(["node", "ss"],
+    gui.App.argv)).parse(options)
+  console.log(parsed)
+
   show.add
   menu.append show
   menu.append quit
@@ -193,7 +208,7 @@ $ ->
 
   win.on 'close', (quit) ->
     if os.platform() == 'darwin' and not quit
-        this.hide()
+      this.hide()
     else
       this.close true
 

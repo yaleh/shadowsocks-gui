@@ -29,6 +29,23 @@ Then copy unzipped files into shadowsocks-gui directory. Then run nw.exe / node-
 
 See also: https://github.com/rogerwang/node-webkit/wiki/How-to-run-apps
 
+Build
+-----
+
+Grunt is applied, and provides two types of building: production and debug.
+
+Production build:
+
+    grunt
+
+Debug build:
+
+    grunt debug
+
+Clean:
+
+    grunt clean
+
 License
 --------
 

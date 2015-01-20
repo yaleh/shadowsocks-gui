@@ -46,7 +46,7 @@ checkUpdate = (callback) ->
             callback r[0], r[1]
             return
     ).fail(->
-      alert("error")
+#      alert("error")
     )
 
 exports.checkUpdate = checkUpdate
