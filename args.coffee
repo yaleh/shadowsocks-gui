@@ -1,12 +1,23 @@
-localStorage = window.localStorage
+localStorage = null
+if window?
+  localStorage = window.localStorage
+else
+  LocalStorage = require('node-localstorage').LocalStorage
+  localStorage = new LocalStorage './test_storage'
 util = require 'util'
 
 fs = require 'fs'
+hydrate = require 'hydrate'
+
 guiconfigFilename = fs.realpathSync(process.execPath + '/..') + '/gui-config.json'
 
 class ServerConfig
-  constructor: (@server, @server_port, @local_port, @password,
-                @method, @timeout) ->
+  constructor: (@server="localhost",
+                @server_port=8388,
+                @local_port=1080,
+                @password='password',
+                @method='aes-256-cfb',
+                @timeout=600) ->
 
 class Configs
   defaultConfig =
@@ -17,11 +28,7 @@ class Configs
 
   constructor: ->
     @configs = []
-    @activeConfigIndex = 1
-
-  loadFromJSON: ->
-
-  saveToJSON: ->
+    @activeConfigIndex = -1
 
   getConfig: (n) ->
     return @configs[n]
@@ -29,19 +36,48 @@ class Configs
   setConfig: (n, config) ->
     @configs[n] = config
 
+  addConfig: (config) ->
+    @configs.push config
+    @setActiveConfigIndex @getActiveConfigIndex()
+
+  getConfigCount: ->
+    @configs.length
+
+  deleteConfig: (n) ->
+    if (not isNaN(n)) and not (n == -1)
+      @configs.splice n,1
+    @setActiveConfigIndex @getActiveConfigIndex()
+
   getActiveConfigIndex: ->
     return @activeConfigIndex
 
   setActiveConfigIndex: (n) ->
+    if n < 0
+      n = 0
+    if n >= @getConfigCount()
+      n = @getConfigCount() - 1
     @activeConfigIndex = n
 
   getActiveConfig: ->
     return @configs[@getActiveConfigIndex()]
 
-  deleteConfig: (n) ->
-    if (not isNaN(n)) and not (n == -1)
-      @configs.splice n,1
-      # saveConfigs configs
+class ConfigsLocalStorage
+  constructor: (@key) ->
+    resolver = new hydrate.ContextResolver
+      Configs:Configs
+      ServerConfig:ServerConfig
+    @hydrate = new hydrate resolver
+
+  load: ->
+    s = if window? then localStorage[@key] else localStorage.getItem(@key)
+    @hydrate.parse s
+
+  save: (configs) ->
+    s = @hydrate.stringify configs
+    if window?
+      localStorage[@key] = s
+    else
+      localStorage.setItem(@key, s)
 
 loadFromJSON = ->
   # Windows users are happy to see a config file within their shadowsocks-gui folder
@@ -152,6 +188,10 @@ deleteConfig = (index) ->
     configs = loadConfigs()
     configs.splice index, 1
     saveConfigs configs
+
+exports.ServerConfig = ServerConfig
+exports.Configs = Configs
+exports.ConfigsLocalStorage = ConfigsLocalStorage
 
 exports.allConfigs = allConfigs
 exports.saveConfig = saveConfig

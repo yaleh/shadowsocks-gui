@@ -22,13 +22,13 @@ $ ->
   os = require 'os'
   gui = require 'nw.gui'
   npm_args = require 'args'
-  # hack util.log
 
   divWarning = $('#divWarning')
   divWarningShown = false
   serverHistory = ->
     (localStorage['server_history'] || '').split('|')
 
+  # hack util.log
   util = require 'util'
   util.log = (s) ->
     console.log new Date().toLocaleString() + " - #{s}"
