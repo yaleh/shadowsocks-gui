@@ -49,14 +49,30 @@ describe 'ConfigsLocalStorage', ->
     configs = new args.Configs
     configs.addConfig new args.ServerConfig
     configs.addConfig new args.ServerConfig '8.8.8.8'
-    expect(storage.save(configs)).to.not.exist
-  it "should load configs", ->
+    configs.addConfig new args.ServerConfig '1.2.3.4'
+    r = storage.save configs
+    # save returns null if it creates a new file and an int when it rewrites a file
+    expect(not r? or r > 0).to.be.true
+#    console.log storage.loadString()
+  it "should load configs and save again", ->
     configs = storage.load()
     configs.should.exist()
-    configs.configs.length.should.equal 2
+    configs.configs.length.should.equal 3
     configs.activeConfigIndex.should.equal 0
-  it "should failed on load a non-existing storage", ->
+    configs.addConfig new args.ServerConfig '4.4.4.4'
+    r = storage.save configs
+    # save returns null if it creates a new file and an int when it rewrites a file
+    expect(not r? or r > 0).to.be.true
+  it "should loads configs again", ->
+    configs = storage.load()
+    configs.should.exist()
+    console.log storage.loadString()
+    console.log configs
+    configs.configs[1].server.should.equal '8.8.8.8'
+    configs.configs.length.should.equal 4
+    configs.activeConfigIndex.should.equal 0
+  it "should create a new Configs if failed to load", ->
     storageNew = new args.ConfigsLocalStorage "New"
     configs = storageNew.load()
-    console.log configs
-    expect(configs).to.be.null
+#    console.log configs
+    configs.configs.length.should.equal 0

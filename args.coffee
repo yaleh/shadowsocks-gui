@@ -68,9 +68,24 @@ class ConfigsLocalStorage
       ServerConfig:ServerConfig
     @hydrate = new hydrate resolver
 
+  initConfigs: ->
+    configs = new Configs()
+#    serverConfig = new ServerConfig \
+#      '209.141.36.62',
+#      8348,
+#      1080,
+#      '$#HAL9000!',
+#      'aes-256-cfb',
+#      600
+#    configs.addConfig serverConfig
+    return configs
+
   load: ->
-    s = if window? then localStorage[@key] else localStorage.getItem(@key)
-    @hydrate.parse s
+    s = @loadString()
+    try
+      return if s? then @hydrate.parse s else @initConfigs()
+    catch SyntaxError
+      return @initConfigs()
 
   save: (configs) ->
     s = @hydrate.stringify configs
@@ -78,6 +93,9 @@ class ConfigsLocalStorage
       localStorage[@key] = s
     else
       localStorage.setItem(@key, s)
+
+  loadString: ->
+    return if window? then localStorage[@key] else localStorage.getItem @key
 
 loadFromJSON = ->
   # Windows users are happy to see a config file within their shadowsocks-gui folder

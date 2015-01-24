@@ -41,6 +41,9 @@ $ ->
   local = require 'shadowsocks'
   update = require './update'
 
+  configsStorage = null
+  confs = null
+
   update.checkUpdate (url, version) ->
     divNewVersion = $('#divNewVersion')
     span = $("<span style='cursor:pointer'>New version #{version} found, click here to download</span>")
@@ -63,39 +66,39 @@ $ ->
 
   chooseServer = ->
     index = +$(this).attr('data-key')
-    args.saveIndex(index)
+#    args.saveIndex(index)
+    confs.setActiveConfigIndex index
     load false
     reloadServerList()
 
   reloadServerList = ->
-    currentIndex = args.loadIndex()
-    configs = args.allConfigs()
     divider = $('#serverIPMenu .insert-point')
     serverMenu = $('#serverIPMenu .divider')
     $('#serverIPMenu li.server').remove()
     i = 0
-    for configName of configs
-      if i == currentIndex
-        menuItem = $("<li class='server'><a tabindex='-1' data-key='#{i}' href='#'><i class='icon-ok'></i> #{configs[configName]}</a> </li>")
+    for serverConfig in confs.configs
+      if i == confs.getActiveConfigIndex()
+        menuItem = $("<li class='server'><a tabindex='-1' data-key='#{i}' href='#'><i class='icon-ok'></i> #{serverConfig.server}</a> </li>")
       else
-        menuItem = $("<li class='server'><a tabindex='-1' data-key='#{i}' href='#'><i class='icon-not-ok'></i> #{configs[configName]}</a> </li>")
+        menuItem = $("<li class='server'><a tabindex='-1' data-key='#{i}' href='#'><i class='icon-not-ok'></i> #{serverConfig.server}</a> </li>")
       menuItem.find('a').click chooseServer
       menuItem.insertBefore(divider, serverMenu)
       i++
 
   addConfig = ->
-    args.saveIndex(NaN)
+    confs.addConfig new args.ServerConfig()
+    confs.setActiveConfigIndex confs.getConfigCount()
     reloadServerList()
     load false
 
   deleteConfig = ->
-    args.deleteConfig(args.loadIndex())
-    args.saveIndex(NaN)
+    confs.deleteConfig(confs.getActiveConfigIndex())
     reloadServerList()
     load false
 
   publicConfig = ->
-    args.saveIndex(-1)
+#    args.saveIndex(-1)
+    confs.setActiveConfigIndex 0
     reloadServerList()
     load false
 
@@ -105,22 +108,27 @@ $ ->
       key = $(this).attr 'data-key'
       val = $(this).val()
       config[key] = val
-    index = args.saveConfig(args.loadIndex(), config)
-    args.saveIndex(index)
+    confs.setConfig confs.getActiveConfigIndex(),new args.ServerConfig \
+      config.server,
+      config.server_port,
+      config.local_port,
+      config.password,
+      config.method,
+      config.timeout
+    configsStorage.save confs
     reloadServerList()
     util.log 'config saved'
-    restartServer config
+    restartServer confs.getActiveConfig()
     false
 
   load = (restart)->
-    config = args.loadConfig(args.loadIndex())
     $('input,select').each ->
       key = $(this).attr 'data-key'
-      val = config[key] or ''
-      $(this).val(val)
-      config[key] = this.value
+      console.log "Key: " + key
+      console.log "Value: " + confs.getActiveConfig()[key]
+      $(this).val confs.getActiveConfig()[key]
     if restart
-      restartServer config
+      restartServer confs.getActiveConfig()
 
   isRestarting = false
 
@@ -185,15 +193,33 @@ $ ->
     name: 'config',
     shortName: 'c',
     type: 'string',
-    help: 'config file'
+    help: 'config file',
+    defaultValue: 'default'
   }])
 
   console.log(options.getHelp())
 
   # npm_args requires two faked parameters at the beginning of argv
-  parsed = npm_args.parser([].concat(["node", "ss"],
-    gui.App.argv)).parse(options)
-  console.log(parsed)
+  try
+    parsed = npm_args.parser([].concat(["node", "ss"],
+      gui.App.argv)).parse(options)
+  catch UnknownArg
+    parsed =
+      config: 'default'
+  console.log "Loading config " + parsed.config + " ."
+
+  configsStorage = new args.ConfigsLocalStorage parsed.config
+  confs = configsStorage.load()
+  console.log confs.getConfigCount()
+  if confs.getConfigCount() == 0
+    # add the initial public server
+    confs.addConfig new args.ServerConfig '209.141.36.62',
+      8348,
+      1080,
+      '$#HAL9000!',
+      'aes-256-cfb',
+      600
+    configsStorage.save confs
 
   show.add
   menu.append show
