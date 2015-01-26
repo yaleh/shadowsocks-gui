@@ -69,8 +69,8 @@ describe 'ConfigsLocalStorage', ->
   it "should loads configs for the 3rd time", ->
     configs = storage.load()
     configs.should.exist()
-    console.log storage.loadString()
-    console.log configs
+#    console.log storage.loadString()
+#    console.log configs
     configs.configs[1].server.should.equal '8.8.8.8'
     configs.getConfigCount().should.equal 4
     expect(configs.getActiveConfigIndex()).to.deep.equal(NaN)
