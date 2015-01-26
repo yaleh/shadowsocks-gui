@@ -12,26 +12,28 @@ hydrate = require 'hydrate'
 guiconfigFilename = fs.realpathSync(process.execPath + '/..') + '/gui-config.json'
 
 class ServerConfig
-  constructor: (@server="localhost",
+  constructor: (@server=null,
                 @server_port=8388,
                 @local_port=1080,
-                @password='password',
+                @password=null,
                 @method='aes-256-cfb',
                 @timeout=600) ->
 
 class Configs
-  defaultConfig =
-    server_port: 8388
-    local_port: 1080
-    method: 'aes-256-cfb'
-    timeout: 600
+  @DEFAULT_CONFIG_INDEX = NaN
+  @PUBLIC_CONFIG_INDEX = -1
 
-  constructor: ->
+  constructor: (@defaultConfig = null, @publicConfig = null) ->
     @configs = []
-    @activeConfigIndex = -1
+    @activeConfigIndex = NaN
 
   getConfig: (n) ->
-    return @configs[n]
+    if n == null or isNaN(n)
+      return @defaultConfig
+    else if n == Configs.PUBLIC_CONFIG_INDEX
+      return @publicConfig
+    else
+      return @configs[n]
 
   setConfig: (n, config) ->
     @configs[n] = config
@@ -44,22 +46,29 @@ class Configs
     @configs.length
 
   deleteConfig: (n) ->
-    if (not isNaN(n)) and not (n == -1)
+    if (n != null) and (not isNaN(n)) and not (n == Configs.PUBLIC_CONFIG_INDEX)
       @configs.splice n,1
     @setActiveConfigIndex @getActiveConfigIndex()
 
   getActiveConfigIndex: ->
-    return @activeConfigIndex
+    return if @activeConfigIndex? then @activeConfigIndex else NaN
 
   setActiveConfigIndex: (n) ->
-    if n < 0
-      n = 0
-    if n >= @getConfigCount()
-      n = @getConfigCount() - 1
+    if n?
+      if n >= @getConfigCount()
+        n = @getConfigCount()
+      else if n < Configs.PUBLIC_CONFIG_INDEX
+        n = Configs.PUBLIC_CONFIG_INDEX
     @activeConfigIndex = n
 
   getActiveConfig: ->
-    return @configs[@getActiveConfigIndex()]
+    return @getConfig @getActiveConfigIndex()
+
+  setDefaultConfig: (config) ->
+    @defaultConfig = config
+
+  setPublicConfig: (config) ->
+    @publicConfig = config
 
 class ConfigsLocalStorage
   constructor: (@key) ->
@@ -68,24 +77,23 @@ class ConfigsLocalStorage
       ServerConfig:ServerConfig
     @hydrate = new hydrate resolver
 
-  initConfigs: ->
-    configs = new Configs()
-#    serverConfig = new ServerConfig \
-#      '209.141.36.62',
-#      8348,
-#      1080,
-#      '$#HAL9000!',
-#      'aes-256-cfb',
-#      600
-#    configs.addConfig serverConfig
+  initConfigs: (defaultConfig, publicConfig) ->
+    configs = new Configs(defaultConfig, publicConfig)
     return configs
 
-  load: ->
+  load: (defaultConfig = null, publicConfig = null) ->
     s = @loadString()
+#    console.log s
     try
-      return if s? then @hydrate.parse s else @initConfigs()
+      if s?
+        configs = @hydrate.parse s
+        configs.setDefaultConfig defaultConfig
+        configs.setPublicConfig publicConfig
+        return configs
+      else
+        return new Configs defaultConfig, publicConfig
     catch SyntaxError
-      return @initConfigs()
+      return new Configs defaultConfig, publicConfig
 
   save: (configs) ->
     s = @hydrate.stringify configs

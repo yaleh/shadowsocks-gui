@@ -66,7 +66,6 @@ $ ->
 
   chooseServer = ->
     index = +$(this).attr('data-key')
-#    args.saveIndex(index)
     confs.setActiveConfigIndex index
     load false
     reloadServerList()
@@ -86,19 +85,18 @@ $ ->
       i++
 
   addConfig = ->
-    confs.addConfig new args.ServerConfig()
-    confs.setActiveConfigIndex confs.getConfigCount()
+    confs.setActiveConfigIndex args.Configs.DEFAULT_CONFIG_INDEX
     reloadServerList()
     load false
 
   deleteConfig = ->
-    confs.deleteConfig(confs.getActiveConfigIndex())
+    confs.deleteConfig confs.getActiveConfigIndex()
+    confs.setActiveConfigIndex args.Configs.DEFAULT_CONFIG_INDEX
     reloadServerList()
     load false
 
   publicConfig = ->
-#    args.saveIndex(-1)
-    confs.setActiveConfigIndex 0
+    confs.setActiveConfigIndex args.Configs.PUBLIC_CONFIG_INDEX
     reloadServerList()
     load false
 
@@ -124,9 +122,10 @@ $ ->
   load = (restart)->
     $('input,select').each ->
       key = $(this).attr 'data-key'
-      console.log "Key: " + key
-      console.log "Value: " + confs.getActiveConfig()[key]
-      $(this).val confs.getActiveConfig()[key]
+      try
+        $(this).val confs.getActiveConfig()[key]
+      catch TypeError
+
     if restart
       restartServer confs.getActiveConfig()
 
@@ -209,17 +208,17 @@ $ ->
   console.log "Loading config " + parsed.config + " ."
 
   configsStorage = new args.ConfigsLocalStorage parsed.config
-  confs = configsStorage.load()
-  console.log confs.getConfigCount()
-  if confs.getConfigCount() == 0
-    # add the initial public server
-    confs.addConfig new args.ServerConfig '209.141.36.62',
+  confs = configsStorage.load \
+    new args.ServerConfig,
+    new args.ServerConfig \
+      '209.141.36.62',
       8348,
       1080,
       '$#HAL9000!',
       'aes-256-cfb',
       600
-    configsStorage.save confs
+
+  console.log confs.getConfigCount()
 
   show.add
   menu.append show

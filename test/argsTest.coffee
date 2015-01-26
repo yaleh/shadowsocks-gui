@@ -6,12 +6,15 @@ args = require '../args'
 
 describe 'ServerConfig', ->
   serverConfig = null
-  it "should have a server", ->
+  it "should have a server with server of null", ->
     serverConfig = new args.ServerConfig
-    serverConfig.server.should.equal 'localhost'
+    expect(serverConfig.server).to.be.a('null')
 
 describe 'Configs', ->
   configs = null
+  it "should has correct consts", ->
+    expect(args.Configs.DEFAULT_CONFIG_INDEX).to.deep.equal NaN
+    args.Configs.PUBLIC_CONFIG_INDEX.should.equal -1
   it "should has no config", ->
     configs = new args.Configs
     configs.getConfigCount().should.equal 0
@@ -33,9 +36,9 @@ describe 'Configs', ->
     configs.getActiveConfigIndex().should.equal 0
   it "should revert to a valid active config index on setting an invalid one", ->
     configs.setActiveConfigIndex 100
-    configs.getActiveConfigIndex().should.equal 0
+    configs.getActiveConfigIndex().should.equal configs.getConfigCount()
     configs.setActiveConfigIndex -100
-    configs.getActiveConfigIndex().should.equal 0
+    configs.getActiveConfigIndex().should.equal args.Configs.PUBLIC_CONFIG_INDEX
   it "should reset active config index on clearing configs", ->
     configs.deleteConfig 0
     configs.getConfigCount().should.equal 0
@@ -57,22 +60,22 @@ describe 'ConfigsLocalStorage', ->
   it "should load configs and save again", ->
     configs = storage.load()
     configs.should.exist()
-    configs.configs.length.should.equal 3
-    configs.activeConfigIndex.should.equal 0
+    configs.getConfigCount().should.equal 3
+    expect(configs.getActiveConfigIndex()).to.deep.equal(NaN)
     configs.addConfig new args.ServerConfig '4.4.4.4'
     r = storage.save configs
     # save returns null if it creates a new file and an int when it rewrites a file
     expect(not r? or r > 0).to.be.true
-  it "should loads configs again", ->
+  it "should loads configs for the 3rd time", ->
     configs = storage.load()
     configs.should.exist()
     console.log storage.loadString()
     console.log configs
     configs.configs[1].server.should.equal '8.8.8.8'
-    configs.configs.length.should.equal 4
-    configs.activeConfigIndex.should.equal 0
+    configs.getConfigCount().should.equal 4
+    expect(configs.getActiveConfigIndex()).to.deep.equal(NaN)
   it "should create a new Configs if failed to load", ->
     storageNew = new args.ConfigsLocalStorage "New"
     configs = storageNew.load()
 #    console.log configs
-    configs.configs.length.should.equal 0
+    configs.getConfigCount().should.equal 0
