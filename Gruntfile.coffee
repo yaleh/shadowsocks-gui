@@ -23,6 +23,8 @@ module.exports = (grunt) ->
         flatten: false
         src: ['*.coffee','!Gruntfile.coffee']
         ext: '.js'
+    coffeelint:
+      app: ['*.coffee']
     clean: ["*.html","main.js","args.js","update.js","*.map","test_storage"]
     watch:
       all:
@@ -34,6 +36,7 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks "grunt-contrib-clean"
   grunt.loadNpmTasks "grunt-contrib-watch"
   grunt.loadNpmTasks "grunt-newer"
+  grunt.loadNpmTasks 'grunt-coffeelint'
 
-  grunt.registerTask "default", ["jade", "coffee:production"]
-  grunt.registerTask "debug", ["jade", "coffee:debug"]
+  grunt.registerTask "default", ['coffeelint', "jade", "coffee:production"]
+  grunt.registerTask "debug", ['coffeelink', "jade", "coffee:debug"]

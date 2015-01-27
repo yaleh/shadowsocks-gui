@@ -1,6 +1,9 @@
 shadowsocks-gui
 ===============
 
+Yale Huang's clone of shadowsocks-gui, works with Ubuntu 14.04 (and maybe
+earlier versions).
+
 GUI for shadowsocks, powered by [shadowsocks-nodejs](https://github.com/clowwindy/shadowsocks-nodejs)
 
 OSX / Windows / Linux

@@ -26,9 +26,10 @@ $ ->
   divWarning = $('#divWarning')
   divWarningShown = false
   serverHistory = ->
+    # TODO: load server history with args
     (localStorage['server_history'] || '').split('|')
 
-  # hack util.log
+  # hack util.log to show logs with the status bar
   util = require 'util'
   util.log = (s) ->
     console.log new Date().toLocaleString() + " - #{s}"
@@ -46,12 +47,14 @@ $ ->
 
   update.checkUpdate (url, version) ->
     divNewVersion = $('#divNewVersion')
-    span = $("<span style='cursor:pointer'>New version #{version} found, click here to download</span>")
+    span = $ "<span style='cursor:pointer'>New version #{version} found,
+      click here to download</span>"
     span.click ->
       gui.Shell.openExternal url
     divNewVersion.find('.msg').append span
     divNewVersion.fadeIn()
 
+  # TODO: move localStroage of server history to args
   addServer = (serverIP) ->
     servers = (localStorage['server_history'] || '').split('|')
     servers.push serverIP
@@ -77,9 +80,15 @@ $ ->
     i = 0
     for serverConfig in confs.configs
       if i == confs.getActiveConfigIndex()
-        menuItem = $("<li class='server'><a tabindex='-1' data-key='#{i}' href='#'><i class='icon-ok'></i> #{serverConfig.server}</a> </li>")
+        menuItem = $("<li class='server'>
+          <a tabindex='-1' data-key='#{i}' href='#'>
+          <i class='icon-ok'></i> #{serverConfig.server}</a>
+          </li>")
       else
-        menuItem = $("<li class='server'><a tabindex='-1' data-key='#{i}' href='#'><i class='icon-not-ok'></i> #{serverConfig.server}</a> </li>")
+        menuItem = $("<li class='server'>
+          <a tabindex='-1' data-key='#{i}' href='#'>
+          <i class='icon-not-ok'></i> #{serverConfig.server}</a>
+          </li>")
       menuItem.find('a').click chooseServer
       menuItem.insertBefore(divider, serverMenu)
       i++
@@ -132,7 +141,8 @@ $ ->
   isRestarting = false
 
   restartServer = (config) ->
-    if config.server and +config.server_port and config.password and +config.local_port and config.method and +config.timeout
+    if config.server and +config.server_port and config.password and
+    +config.local_port and config.method and +config.timeout
       if isRestarting
         util.log "Already restarting"
         return
@@ -141,7 +151,14 @@ $ ->
         try
           isRestarting = false
           util.log 'Starting shadowsocks...'
-          window.local = local.createServer config.server, config.server_port, config.local_port, config.password, config.method, 1000 * (config.timeout or 600), '127.0.0.1'
+          window.local = local.createServer \
+            config.server,
+            config.server_port,
+            config.local_port,
+            config.password,
+            config.method,
+            1000 * (config.timeout or 600),
+            '127.0.0.1'
           addServer config.server
           $('#divError').fadeOut()
 #          gui.Window.get().hide()

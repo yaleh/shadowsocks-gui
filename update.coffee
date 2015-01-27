@@ -27,9 +27,10 @@ checkUpdate = (callback) ->
     arch = process.arch
     platform = platformMap[process.platform]
     # jQuery works well with node-webkit
-    $ = window.$;
+    $ = window.$
     re = /^.*shadowsocks-gui-([\d\.]+)-(\w+)-(\w+)\..*$/
-    $.get('https://sourceforge.net/api/file/index/project-id/1817190/path/dist/mtime/desc/limit/4/rss',(data) ->
+    $.get('https://sourceforge.net/api/file/index/project-id/1817190/path/dist/
+      mtime/desc/limit/4/rss',(data) ->
       results = []
       $(data).find('content').each ->
         url = $(this).attr('url')

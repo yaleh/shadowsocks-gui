@@ -99,6 +99,13 @@ class ConfigsLocalStorage
     else
       localStorage.setItem(@key, s)
 
+  save: (configs) ->
+    s = @hydrate.stringify configs
+    if window?
+      localStorage[@key] = s
+    else
+      localStorage.setItem(@key, s)
+
   loadString: ->
     return if window? then localStorage[@key] else localStorage.getItem @key
 
