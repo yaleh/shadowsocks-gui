@@ -57,7 +57,16 @@ class Configs
   # Set the **n**th config
   #
   setConfig: (n, config) ->
-    @configs[n] = config
+    if n == Configs.PUBLIC_CONFIG_INDEX
+      # if modified based on public server, add a profile,
+      # don't modify public server
+      n = Configs.DEFAULT_CONFIG_INDEX
+    if isNaN(n)
+      # an unsaved new config
+      @configs.push config
+      @setActiveConfigIndex @getConfigCount()-1
+    else
+      @configs[n] = config
 
   # Add a new config to the end
   #
@@ -168,6 +177,7 @@ class ConfigsLocalStorage
   #
   saveConfigs: (configs) ->
     s = @hydrate.stringify configs
+    console.log s
     if window?
       localStorage[@key] = s
     else
