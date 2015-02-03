@@ -112,7 +112,7 @@ class Configs
 # Example:
 #
 #      configsStorage = new args.ConfigsLocalStorage 'key'
-#      confs = configsStorage.load
+#      confs = configsStorage.loadConfigs
 #        new args.ServerConfig,
 #        new args.ServerConfig
 #          '209.141.36.62',
@@ -145,8 +145,8 @@ class ConfigsLocalStorage
   # * localStorage[] for node-webkit
   # * node-localstorage for node.js ( mocha test )
   #
-  load: (defaultConfig = null, publicConfig = null) ->
-    s = @loadString()
+  loadConfigs: (defaultConfig = null, publicConfig = null) ->
+    s = @loadString(@key)
     try
       if s?
         configs = @hydrate.parse s
@@ -166,7 +166,7 @@ class ConfigsLocalStorage
 
   # Save configs to storage.
   #
-  save: (configs) ->
+  saveConfigs: (configs) ->
     s = @hydrate.stringify configs
     if window?
       localStorage[@key] = s
@@ -175,8 +175,35 @@ class ConfigsLocalStorage
 
   # A function to test localStorage
   #
-  loadString: ->
-    return if window? then localStorage[@key] else localStorage.getItem @key
+  loadString: (k=@key) ->
+    return if window? then localStorage[k] else localStorage.getItem k
+
+  # Return the key for server history
+  #
+  getServerHistoryKey: ->
+    "#{ @key }/history"
+
+  # Get server history
+  #
+  getServerHistory: ->
+    console.log @
+    s = @loadString @getServerHistoryKey()
+    return (s || '').split('|')
+
+  # Add a new item to server history
+  #
+  addServerHistory: (server) ->
+    servers = @getServerHistory()
+    servers.push server
+    newServers = []
+    for server in servers
+      if server and server not in newServers
+        newServers.push server
+    s = newServers.join '|'
+    if window?
+      localStorage[@getServerHistoryKey()] = s
+    else
+      localStorage.setItem(@getServerHistoryKey(), s)
 
 exports.ServerConfig = ServerConfig
 exports.Configs = Configs

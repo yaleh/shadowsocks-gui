@@ -64,8 +64,8 @@ $ ->
         newServers.push server
     localStorage['server_history'] = newServers.join '|'
 
-  $('#inputServerIP').typeahead
-    source: serverHistory
+#  $('#inputServerIP').typeahead
+#    source: serverHistory
 
   chooseServer = ->
     index = +$(this).attr('data-key')
@@ -122,7 +122,7 @@ $ ->
       config.password,
       config.method,
       config.timeout
-    configsStorage.save confs
+    configsStorage.saveConfigs confs
     reloadServerList()
     util.log 'config saved'
     restartServer confs.getActiveConfig()
@@ -159,7 +159,8 @@ $ ->
             config.method,
             1000 * (config.timeout or 600),
             '127.0.0.1'
-          addServer config.server
+#          addServer config.server
+          configsStorage.addServerHistory config.server
           $('#divError').fadeOut()
 #          gui.Window.get().hide()
         catch e
@@ -225,7 +226,7 @@ $ ->
   console.log "Loading config " + parsed.config + " ."
 
   configsStorage = new args.ConfigsLocalStorage parsed.config
-  confs = configsStorage.load \
+  confs = configsStorage.loadConfigs \
     new args.ServerConfig,
     new args.ServerConfig \
       '209.141.36.62',
@@ -236,6 +237,10 @@ $ ->
       600
 
   console.log confs.getConfigCount()
+
+  $('#inputServerIP').typeahead
+    source: ->
+      configsStorage.getServerHistory()
 
   show.add
   menu.append show
