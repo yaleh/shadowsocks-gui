@@ -25,11 +25,16 @@ module.exports = (grunt) ->
         ext: '.js'
     coffeelint:
       app: ['*.coffee']
+    docco:
+      debug:
+        src: ['*.coffee','!Gruntfile.coffee']
+        options:
+          output: 'docs'
     clean: ["*.html","main.js","args.js","update.js","*.map","test_storage"]
     watch:
       all:
         files: ['index.jade', '*.coffee']
-        tasks: ['newer:coffee:debug', 'newer:jade']
+        tasks: ['newer:coffee:debug', 'newer:jade', 'newer:docco:debug']
 
   grunt.loadNpmTasks "grunt-contrib-coffee"
   grunt.loadNpmTasks "grunt-contrib-jade"
@@ -37,6 +42,10 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks "grunt-contrib-watch"
   grunt.loadNpmTasks "grunt-newer"
   grunt.loadNpmTasks 'grunt-coffeelint'
+  grunt.loadNpmTasks 'grunt-docco'
 
   grunt.registerTask "default", ['coffeelint', "jade", "coffee:production"]
-  grunt.registerTask "debug", ['coffeelink', "jade", "coffee:debug"]
+  grunt.registerTask "debug", ['coffeelint',
+                               "jade",
+                               "coffee:debug",
+                               'docco:debug']
