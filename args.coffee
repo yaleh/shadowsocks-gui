@@ -177,7 +177,6 @@ class ConfigsLocalStorage
   #
   saveConfigs: (configs) ->
     s = @hydrate.stringify configs
-    console.log s
     if window?
       localStorage[@key] = s
     else
@@ -196,7 +195,6 @@ class ConfigsLocalStorage
   # Get server history
   #
   getServerHistory: ->
-    console.log @
     s = @loadString @getServerHistoryKey()
     return (s || '').split('|')
 

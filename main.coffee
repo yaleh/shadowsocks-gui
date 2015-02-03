@@ -25,9 +25,6 @@ $ ->
 
   divWarning = $('#divWarning')
   divWarningShown = false
-  serverHistory = ->
-    # TODO: load server history with args
-    (localStorage['server_history'] || '').split('|')
 
   # hack util.log to show logs with the status bar
   util = require 'util'
@@ -53,19 +50,6 @@ $ ->
       gui.Shell.openExternal url
     divNewVersion.find('.msg').append span
     divNewVersion.fadeIn()
-
-  # TODO: move localStroage of server history to args
-  addServer = (serverIP) ->
-    servers = (localStorage['server_history'] || '').split('|')
-    servers.push serverIP
-    newServers = []
-    for server in servers
-      if server and server not in newServers
-        newServers.push server
-    localStorage['server_history'] = newServers.join '|'
-
-#  $('#inputServerIP').typeahead
-#    source: serverHistory
 
   chooseServer = ->
     index = +$(this).attr('data-key')
@@ -159,10 +143,13 @@ $ ->
             config.method,
             1000 * (config.timeout or 600),
             '127.0.0.1'
-#          addServer config.server
           configsStorage.addServerHistory config.server
           $('#divError').fadeOut()
+
+          # Don't hide the window, since the tray icon doesn't work for Ubuntu
+          #
 #          gui.Window.get().hide()
+
         catch e
           util.log e
       if window.local?
