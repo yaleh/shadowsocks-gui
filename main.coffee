@@ -78,13 +78,15 @@ $ ->
       i++
 
   addConfig = ->
+    # active the default config first
+    # create and save the new config until saving it
     confs.setActiveConfigIndex args.Configs.DEFAULT_CONFIG_INDEX
     reloadServerList()
     load false
 
   deleteConfig = ->
     confs.deleteConfig confs.getActiveConfigIndex()
-    confs.setActiveConfigIndex args.Configs.DEFAULT_CONFIG_INDEX
+    # Configs will adjust the active index
     reloadServerList()
     load false
 
@@ -99,13 +101,24 @@ $ ->
       key = $(this).attr 'data-key'
       val = $(this).val()
       config[key] = val
-    confs.setConfig confs.getActiveConfigIndex(),new args.ServerConfig \
+    serverConfig = new args.ServerConfig \
       config.server,
       config.server_port,
       config.local_port,
       config.password,
       config.method,
       config.timeout
+    n = confs.getActiveConfigIndex()
+    if n == args.Configs.PUBLIC_CONFIG_INDEX
+      # if modified based on public server, add a profile,
+      # don't modify public server
+      n = args.Configs.DEFAULT_CONFIG_INDEX
+    if n == args.Configs.DEFAULT_CONFIG_INDEX
+      # create a new config, see addconfig()
+      confs.addConfig serverConfig
+      confs.setActiveConfigIndex confs.getConfigCount()-1
+    else
+      confs.setConfig n, serverConfig
     configsStorage.saveConfigs confs
     reloadServerList()
     util.log 'config saved'
@@ -249,4 +262,5 @@ $ ->
   win.setResizable(true)
 
   reloadServerList()
+  console.log confs
   load true

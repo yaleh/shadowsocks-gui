@@ -13,7 +13,7 @@ describe 'ServerConfig', ->
 describe 'Configs', ->
   configs = null
   it "should has correct consts", ->
-    expect(args.Configs.DEFAULT_CONFIG_INDEX).to.deep.equal NaN
+    args.Configs.DEFAULT_CONFIG_INDEX.should.equal -2
     args.Configs.PUBLIC_CONFIG_INDEX.should.equal -1
   it "should has no config", ->
     configs = new args.Configs
@@ -36,7 +36,7 @@ describe 'Configs', ->
     configs.getActiveConfigIndex().should.equal 0
   it "should revert to a valid active config index on setting an invalid one", ->
     configs.setActiveConfigIndex 100
-    configs.getActiveConfigIndex().should.equal configs.getConfigCount()
+    configs.getActiveConfigIndex().should.equal configs.getConfigCount()-1
     configs.setActiveConfigIndex -100
     configs.getActiveConfigIndex().should.equal args.Configs.PUBLIC_CONFIG_INDEX
   it "should reset active config index on clearing configs", ->
@@ -56,12 +56,11 @@ describe 'ConfigsLocalStorage', ->
     r = storage.saveConfigs configs
     # save returns null if it creates a new file and an int when it rewrites a file
     expect(not r? or r > 0).to.be.true
-#    console.log storage.loadString()
   it "should load configs and save again", ->
     configs = storage.loadConfigs()
     configs.should.exist()
     configs.getConfigCount().should.equal 3
-    expect(configs.getActiveConfigIndex()).to.deep.equal(NaN)
+    configs.getActiveConfigIndex().should.equal args.Configs.DEFAULT_CONFIG_INDEX
     configs.addConfig new args.ServerConfig '4.4.4.4'
     r = storage.saveConfigs configs
     # save returns null if it creates a new file and an int when it rewrites a file
@@ -69,13 +68,11 @@ describe 'ConfigsLocalStorage', ->
   it "should loads configs for the 3rd time", ->
     configs = storage.loadConfigs()
     configs.should.exist()
-#    console.log storage.loadString()
-#    console.log configs
+
     configs.configs[1].server.should.equal '8.8.8.8'
     configs.getConfigCount().should.equal 4
-    expect(configs.getActiveConfigIndex()).to.deep.equal(NaN)
+    configs.getActiveConfigIndex().should.equal args.Configs.DEFAULT_CONFIG_INDEX
   it "should create a new Configs if failed to load", ->
     storageNew = new args.ConfigsLocalStorage "New"
     configs = storageNew.loadConfigs()
-#    console.log configs
     configs.getConfigCount().should.equal 0

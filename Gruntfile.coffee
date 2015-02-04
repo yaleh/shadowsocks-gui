@@ -14,14 +14,14 @@ module.exports = (grunt) ->
           sourceMap: false
         expand: true
         flatten: false
-        src: ['*.coffee','!Gruntfile.coffee']
+        src: ['*.coffee','test/*.coffee','!Gruntfile.coffee']
         ext: '.js'
       debug:
         options:
           sourceMap: true
         expand: true
         flatten: false
-        src: ['*.coffee','!Gruntfile.coffee']
+        src: ['*.coffee','test/*.coffee','!Gruntfile.coffee']
         ext: '.js'
     coffeelint:
       app: ['*.coffee']
@@ -30,10 +30,17 @@ module.exports = (grunt) ->
         src: ['*.coffee','!Gruntfile.coffee']
         options:
           output: 'docs'
-    clean: ["*.html","main.js","args.js","update.js","*.map","test_storage"]
+    clean: ["*.html",
+            "main.js",
+            "args.js",
+            "update.js",
+            "test/*.js",
+            "test/*.map",
+            "*.map",
+            "test_storage"]
     watch:
       all:
-        files: ['index.jade', '*.coffee']
+        files: ['index.jade', '*.coffee', 'test/*.coffee']
         tasks: ['newer:coffee:debug', 'newer:jade', 'newer:docco:debug']
 
   grunt.loadNpmTasks "grunt-contrib-coffee"

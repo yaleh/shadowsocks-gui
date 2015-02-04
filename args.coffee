@@ -33,7 +33,7 @@ class ServerConfig
 #
 class Configs
   # The index of the default config
-  @DEFAULT_CONFIG_INDEX = NaN
+  @DEFAULT_CONFIG_INDEX = -2
   # The index of the public config
   @PUBLIC_CONFIG_INDEX = -1
 
@@ -47,7 +47,8 @@ class Configs
   # Get the **n**th config
   #
   getConfig: (n) ->
-    if n == null or isNaN(n)
+#    console.log "getConfig(): #{ n }"
+    if n == null or n == Configs.DEFAULT_CONFIG_INDEX
       return @defaultConfig
     else if n == Configs.PUBLIC_CONFIG_INDEX
       return @publicConfig
@@ -57,22 +58,14 @@ class Configs
   # Set the **n**th config
   #
   setConfig: (n, config) ->
-    if n == Configs.PUBLIC_CONFIG_INDEX
-      # if modified based on public server, add a profile,
-      # don't modify public server
-      n = Configs.DEFAULT_CONFIG_INDEX
-    if isNaN(n)
-      # an unsaved new config
-      @configs.push config
-      @setActiveConfigIndex @getConfigCount()-1
-    else
-      @configs[n] = config
+    if n < 0 or n >= @getConfigCount()
+      return null
+    @configs[n] = config
 
   # Add a new config to the end
   #
   addConfig: (config) ->
     @configs.push config
-    @setActiveConfigIndex @getActiveConfigIndex()
 
   # Get the count of configs
   #
@@ -82,28 +75,38 @@ class Configs
   # Delete a config
   #
   deleteConfig: (n) ->
-    if (n != null) and (not isNaN(n)) and not (n == Configs.PUBLIC_CONFIG_INDEX)
+    if (n != null) and
+    (n != Configs.DEFAULT_CONFIG_INDEX) and
+    (n != Configs.PUBLIC_CONFIG_INDEX)
       @configs.splice n,1
+    # setActiveConfigIndex will adjust the active index after deleting a config
     @setActiveConfigIndex @getActiveConfigIndex()
 
   # Get the current active config index
   #
   getActiveConfigIndex: ->
-    return if @activeConfigIndex? then @activeConfigIndex else NaN
+    return if @activeConfigIndex? and not isNaN(@activeConfigIndex) \
+      then @activeConfigIndex \
+      else Configs.DEFAULT_CONFIG_INDEX
 
   # Set the active config index
   #
   setActiveConfigIndex: (n) ->
-    if n?
-      if n >= @getConfigCount()
-        n = @getConfigCount()
-      else if n < Configs.PUBLIC_CONFIG_INDEX
-        n = Configs.PUBLIC_CONFIG_INDEX
-    @activeConfigIndex = n
+    if not n?
+      @activeConfigIndex = Configs.PUBLIC_CONFIG_INDEX
+    if n >= @getConfigCount()
+      n = @getConfigCount() - 1
+    if n >= 0 or
+    n == Configs.DEFAULT_CONFIG_INDEX or
+    n == Configs.PUBLIC_CONFIG_INDEX
+      @activeConfigIndex = n
+    else
+      @activeConfigIndex = Configs.PUBLIC_CONFIG_INDEX
 
   # Get the active config
   #
   getActiveConfig: ->
+#    console.log "getActiveConfig(): #{ @getActiveConfigIndex() }"
     return @getConfig @getActiveConfigIndex()
 
   # Set default config
