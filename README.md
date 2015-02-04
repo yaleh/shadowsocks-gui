@@ -23,6 +23,7 @@ Clone the repo and install dependencies:
     git clone https://github.com/yaleh/shadowsocks-gui.git
     cd shadowsocks-gui
     npm install
+    bower install
 
 Download [node-webkit](https://github.com/rogerwang/node-webkit#downloads)
 
