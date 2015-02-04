@@ -27,7 +27,7 @@ module.exports = (grunt) ->
       app: ['*.coffee']
     docco:
       debug:
-        src: ['*.coffee','!Gruntfile.coffee']
+        src: ['*.coffee','test/*.coffee','!Gruntfile.coffee']
         options:
           output: 'docs'
     clean: ["*.html",

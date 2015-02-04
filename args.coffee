@@ -174,7 +174,7 @@ class ConfigsLocalStorage
     if window?
       localStorage[@key] = s
     else
-      localStorage.setItem(@key, s)
+      localStorage.setItem @key, s
 
   # Save configs to storage.
   #
@@ -183,7 +183,7 @@ class ConfigsLocalStorage
     if window?
       localStorage[@key] = s
     else
-      localStorage.setItem(@key, s)
+      localStorage.setItem @key, s
 
   # A function to test localStorage
   #
@@ -214,7 +214,15 @@ class ConfigsLocalStorage
     if window?
       localStorage[@getServerHistoryKey()] = s
     else
-      localStorage.setItem(@getServerHistoryKey(), s)
+      localStorage.setItem @getServerHistoryKey(), s
+
+  reset: ->
+    if window?
+      delete localStorage[@key]
+      delete localStorage[@getServerHistoryKey()]
+    else
+      localStorage.removeItem @key
+      localStorage.removeItem @getServerHistoryKey()
 
 exports.ServerConfig = ServerConfig
 exports.Configs = Configs
