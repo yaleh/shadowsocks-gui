@@ -204,7 +204,7 @@ $ ->
     type: 'normal'
     label: 'Quit'
     click: ->
-      gui.Window.get().close(true)
+      gui.Window.get().close true
 
   options = npm_args.Options.parse([{
     name: 'config',
@@ -212,9 +212,15 @@ $ ->
     type: 'string',
     help: 'config file',
     defaultValue: 'default'
+  },{
+    name: 'reset',
+    shortName: 'r',
+    type: 'bool',
+    help: 'reset configs and server history',
+    defaultValue: false
   }])
 
-  console.log(options.getHelp())
+  console.log options.getHelp()
 
   # npm_args requires two faked parameters at the beginning of argv
   try
@@ -223,9 +229,15 @@ $ ->
   catch UnknownArg
     parsed =
       config: 'default'
-  console.log "Loading config " + parsed.config + " ."
+  console.log \
+    (if parsed.reset then "Resetting config" else "Loading config ") + \
+    parsed.config + " ."
 
   configsStorage = new args.ConfigsLocalStorage parsed.config
+  if parsed.reset
+    # reset configs and server history
+    configsStorage.reset()
+
   confs = configsStorage.loadConfigs \
     new args.ServerConfig,
     new args.ServerConfig \
