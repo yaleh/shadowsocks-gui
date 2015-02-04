@@ -37,7 +37,8 @@ module.exports = (grunt) ->
             "test/*.js",
             "test/*.map",
             "*.map",
-            "test_storage"]
+            "test_storage",
+            "docs"]
     watch:
       all:
         files: ['index.jade', '*.coffee', 'test/*.coffee']
