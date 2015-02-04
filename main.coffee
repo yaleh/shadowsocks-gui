@@ -74,7 +74,7 @@ $ ->
           <i class='icon-not-ok'></i> #{serverConfig.server}</a>
           </li>")
       menuItem.find('a').click chooseServer
-      menuItem.insertBefore(divider, serverMenu)
+      menuItem.insertBefore divider, serverMenu
       i++
 
   addConfig = ->
@@ -206,7 +206,7 @@ $ ->
     click: ->
       gui.Window.get().close true
 
-  options = npm_args.Options.parse([{
+  options = npm_args.Options.parse [{
     name: 'config',
     shortName: 'c',
     type: 'string',
@@ -218,9 +218,15 @@ $ ->
     type: 'bool',
     help: 'reset configs and server history',
     defaultValue: false
-  }])
+  },{
+    name: 'help',
+    shortName: 'h',
+    type: 'bool',
+    help: 'show this help',
+    defaultValue: false
+  }]
 
-  console.log options.getHelp()
+#  process.stdout.write options.getHelp()
 
   # npm_args requires two faked parameters at the beginning of argv
   try
@@ -229,9 +235,15 @@ $ ->
   catch UnknownArg
     parsed =
       config: 'default'
-  console.log \
-    (if parsed.reset then "Resetting config" else "Loading config ") + \
-    parsed.config + " ."
+
+  if parsed.help
+    process.stdout.write options.getHelp()
+    process.exit 0
+
+  if parsed.reset or parsed.config != 'default'
+    process.stdout.write \
+      (if parsed.reset then "Resetting config" else "Loading config ") + \
+      parsed.config + " .\n"
 
   configsStorage = new args.ConfigsLocalStorage parsed.config
   if parsed.reset
@@ -247,8 +259,6 @@ $ ->
       '$#HAL9000!',
       'aes-256-cfb',
       600
-
-  console.log confs.getConfigCount()
 
   $('#inputServerIP').typeahead
     source: ->
@@ -274,5 +284,4 @@ $ ->
   win.setResizable(true)
 
   reloadServerList()
-  console.log confs
   load true
