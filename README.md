@@ -51,6 +51,11 @@ Clean:
 
     grunt clean
 
+Run
+---
+
+    nw .
+
 License
 --------
 
