@@ -8,21 +8,19 @@ GUI for shadowsocks, powered by [shadowsocks-nodejs](https://github.com/clowwind
 
 OSX / Windows / Linux
 
-![Screenshot](https://raw.github.com/shadowsocks/shadowsocks-gui/master/screenshot.png)
+![Screenshot](https://raw.github.com/yaleh/shadowsocks-gui/master/screenshot.png)
 
 Download
 --------
 
-Download the latest version of your OS:
-
-https://sourceforge.net/projects/shadowsocksgui/files/dist/
+TODO.
 
 Develop
 -------
 
 Clone the repo and install dependencies:
 
-    git clone https://github.com/shadowsocks/shadowsocks-gui.git
+    git clone https://github.com/yaleh/shadowsocks-gui.git
     cd shadowsocks-gui
     npm install
 
