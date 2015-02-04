@@ -4,6 +4,8 @@ module.exports = (grunt) ->
   # Project configuration.
   grunt.initConfig
     pkg: grunt.file.readJSON("package.json")
+    bower:
+      install: {}
     jade:
       all:
         files:
@@ -51,9 +53,14 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks "grunt-newer"
   grunt.loadNpmTasks 'grunt-coffeelint'
   grunt.loadNpmTasks 'grunt-docco'
+  grunt.loadNpmTasks 'grunt-bower-task'
 
-  grunt.registerTask "default", ['coffeelint', "jade", "coffee:production"]
-  grunt.registerTask "debug", ['coffeelint',
+  grunt.registerTask "default", ['bower',
+                                 'coffeelint',
+                                 "jade",
+                                 "coffee:production"]
+  grunt.registerTask "debug", ['bower',
+                               'coffeelint',
                                "jade",
                                "coffee:debug",
                                'docco:debug']

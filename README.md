@@ -23,7 +23,6 @@ Clone the repo and install dependencies:
     git clone https://github.com/yaleh/shadowsocks-gui.git
     cd shadowsocks-gui
     npm install
-    bower install
 
 Download [node-webkit](https://github.com/rogerwang/node-webkit#downloads)
 
@@ -34,7 +33,11 @@ See also: https://github.com/rogerwang/node-webkit/wiki/How-to-run-apps
 Build
 -----
 
-Grunt is applied, and provides two types of building: production and debug.
+Grunt and bower are required for building:
+
+    npm install -g grunt bower
+
+There are two types of building: production and debug.
 
 Production build:
 
