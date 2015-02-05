@@ -10,3 +10,8 @@ gui-config.json
 *~
 bower_components
 build
+lib/
+Cache/
+Gruntfile.js
+cookies
+cookies-journal
