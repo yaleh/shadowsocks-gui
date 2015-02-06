@@ -24,6 +24,12 @@ class ServerConfig
                 @method='aes-256-cfb', # encrypting method
                 @timeout=600 ) -> # timeout in seconds
 
+  uri: ->
+    "ss://" +
+      new Buffer( \
+        "#{ @method }:#{ @password }@#{ @server }:#{ @server_port }" \
+      ).toString('base64')
+
 # A container of ServerConfig items
 #
 # Accessing config items:

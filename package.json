@@ -13,6 +13,7 @@
     "flour": "~0.5.8",
     "hydrate": "git://github.com/nanodeath/HydrateJS",
     "jade": "~1.3.1",
+    "qr-image": "^3.1.0",
     "sh": "0.0.3",
     "shadowsocks": "1.5.2",
     "uglify-js": "~2.4.15"
@@ -21,7 +22,7 @@
     "icon": "icon.png",
     "toolbar": false,
     "width": 500,
-    "height": 250,
+    "height": 480,
     "position": "mouse",
     "resizable": true
   },
