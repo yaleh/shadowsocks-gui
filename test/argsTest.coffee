@@ -8,7 +8,16 @@ describe 'ServerConfig', ->
   serverConfig = null
   it "should have a server with server of null", ->
     serverConfig = new args.ServerConfig
-    expect(serverConfig.server).to.be.a('null')
+    expect(serverConfig.server).to.be.a 'null'
+  it "should returns an ss uri of a default server config", ->
+    (new Buffer serverConfig.uri().slice(5), 'base64').toString('ascii'). \
+      should.equal 'aes-256-cfb:null@null:8388'
+    serverConfig.uri().should.equal 'ss://YWVzLTI1Ni1jZmI6bnVsbEBudWxsOjgzODg='
+  it "should return an ss uri", ->
+    serverConfig = new args.ServerConfig '8.8.8.8'
+    (new Buffer serverConfig.uri().slice(5), 'base64').toString('ascii'). \
+      should.equal 'aes-256-cfb:null@8.8.8.8:8388'
+
 
 describe 'Configs', ->
   configs = null
@@ -64,8 +73,8 @@ describe 'ConfigsLocalStorage', ->
     configs = storage.loadConfigs()
     configs.should.exist()
     configs.getConfigCount().should.equal 0
-    expect(configs.getConfig(args.Configs.DEFAULT_CONFIG_INDEX)).to.be.null
-    expect(configs.getConfig(args.Configs.PUBLIC_CONFIG_INDEX)).to.be.null
+    expect(configs.getConfig args.Configs.DEFAULT_CONFIG_INDEX).to.be.null
+    expect(configs.getConfig args.Configs.PUBLIC_CONFIG_INDEX).to.be.null
 
   it "should write to file", ->
     configs = new args.Configs
@@ -124,5 +133,5 @@ describe 'ConfigsLocalStorage', ->
     configs = storage.loadConfigs()
     configs.should.exist()
     configs.getConfigCount().should.equal 0
-    expect(configs.getConfig(args.Configs.DEFAULT_CONFIG_INDEX)).to.be.null
-    expect(configs.getConfig(args.Configs.PUBLIC_CONFIG_INDEX)).to.be.null
+    expect(configs.getConfig args.Configs.DEFAULT_CONFIG_INDEX).to.be.null
+    expect(configs.getConfig args.Configs.PUBLIC_CONFIG_INDEX).to.be.null

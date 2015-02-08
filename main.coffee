@@ -22,6 +22,7 @@ $ ->
   os = require 'os'
   gui = require 'nw.gui'
   npm_args = require 'args'
+  qr = require 'qr-image'
 
   divWarning = $('#divWarning')
   divWarningShown = false
@@ -77,6 +78,12 @@ $ ->
       menuItem.insertBefore divider, serverMenu
       i++
 
+    # update URI
+    uri = confs.getActiveConfig().uri()
+    $('#uri').val uri
+    $('#uriqr').attr 'src', 'data:image/png;base64,' +
+      new Buffer(qr.imageSync uri, {type: 'png'}).toString('base64')
+
   addConfig = ->
     # active the default config first
     # create and save the new config until saving it
@@ -128,9 +135,10 @@ $ ->
   load = (restart)->
     $('input,select').each ->
       key = $(this).attr 'data-key'
-      try
-        $(this).val confs.getActiveConfig()[key]
-      catch TypeError
+      if key?
+        try
+          $(this).val confs.getActiveConfig()[key]
+        catch TypeError
 
     if restart
       restartServer confs.getActiveConfig()

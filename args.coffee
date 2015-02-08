@@ -24,6 +24,12 @@ class ServerConfig
                 @method='aes-256-cfb', # encrypting method
                 @timeout=600 ) -> # timeout in seconds
 
+  uri: ->
+    "ss://" +
+      new Buffer( \
+        "#{ @method }:#{ @password }@#{ @server }:#{ @server_port }" \
+      ).toString('base64')
+
 # A container of ServerConfig items
 #
 # Accessing config items:
@@ -149,7 +155,7 @@ class ConfigsLocalStorage
   # A private function to initializing config container
   #
   initConfigs: (defaultConfig, publicConfig) ->
-    configs = new Configs(defaultConfig, publicConfig)
+    configs = new Configs defaultConfig, publicConfig
     return configs
 
   # Load configs from storage.

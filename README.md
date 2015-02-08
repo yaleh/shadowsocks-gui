@@ -35,7 +35,7 @@ Build
 
 Grunt and bower are required for building:
 
-    npm install -g grunt bower
+    npm install -g grunt-cli bower
 
 There are two types of building: production and debug.
 
@@ -55,6 +55,17 @@ Run
 ---
 
     nw .
+
+Unit Test
+---------
+
+    npm install -g mocha
+    mocha
+
+Todo
+----
+* A chart of traffic
+* An extensible log view
 
 License
 --------
