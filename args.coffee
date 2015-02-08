@@ -155,7 +155,7 @@ class ConfigsLocalStorage
   # A private function to initializing config container
   #
   initConfigs: (defaultConfig, publicConfig) ->
-    configs = new Configs(defaultConfig, publicConfig)
+    configs = new Configs defaultConfig, publicConfig
     return configs
 
   # Load configs from storage.
