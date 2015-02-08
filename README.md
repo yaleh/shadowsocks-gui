@@ -62,6 +62,11 @@ Unit Test
     npm install -g mocha
     mocha
 
+Todo
+----
+* A chart of traffic
+* An extensible log view
+
 License
 --------
 
