@@ -9,6 +9,8 @@ describe 'ServerConfig', ->
   it "should have a server with server of null", ->
     serverConfig = new args.ServerConfig
     expect(serverConfig.server).to.be.a('null')
+  it "should returns an ss uri", ->
+    serverConfig.uri().should.equal 'ss://YWVzLTI1Ni1jZmI6bnVsbEBudWxsOjgzODg='
 
 describe 'Configs', ->
   configs = null
