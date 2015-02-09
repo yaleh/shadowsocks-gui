@@ -1,5 +1,3 @@
-sh = require("sh")
-
 module.exports = (grunt) ->
   # Project configuration.
   grunt.initConfig
@@ -32,6 +30,9 @@ module.exports = (grunt) ->
         src: ['*.coffee','test/*.coffee','!Gruntfile.coffee']
         options:
           output: 'docs'
+    shell:
+      plantuml:
+        command: 'plantuml *.coffee'
     clean: ["*.html",
             "main.js",
             "args.js",
@@ -54,6 +55,7 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks 'grunt-coffeelint'
   grunt.loadNpmTasks 'grunt-docco'
   grunt.loadNpmTasks 'grunt-bower-task'
+  grunt.loadNpmTasks 'grunt-shell'
 
   grunt.registerTask "default", ['bower',
                                  'coffeelint',
@@ -63,4 +65,6 @@ module.exports = (grunt) ->
                                'coffeelint',
                                "jade",
                                "coffee:debug",
-                               'docco:debug']
+                               'docco:debug',
+                               'shell:plantuml'
+                              ]

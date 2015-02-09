@@ -11,6 +11,13 @@ util = require 'util'
 fs = require 'fs'
 hydrate = require 'hydrate'
 
+# ![Class Diagram](args_class_diagram.png)
+#
+# @startuml{docs/args_class_diagram.png}
+#   Configs *-- ServerConfig
+#   ConfigsLocalStroage ..> Configs
+# @enduml
+
 # A config of a shadowsocks server
 #
 class ServerConfig

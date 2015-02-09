@@ -45,6 +45,7 @@
     "grunt-contrib-watch": "^0.6.1",
     "grunt-docco": "^0.3.3",
     "grunt-newer": "^1.1.0",
+    "grunt-shell": "^1.1.1",
     "mocha": "^2.1.0",
     "node-localstorage": "^0.3.6"
   }
