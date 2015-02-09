@@ -16,6 +16,8 @@ hydrate = require 'hydrate'
 # @startuml{docs/args_class_diagram.png}
 #   Configs *-- ServerConfig
 #   ConfigsLocalStroage ..> Configs
+#   note right of ConfigsLocalStroage: Loads Configs and server history
+#   note right of Configs: A container of ServerConfig
 # @enduml
 
 # A config of a shadowsocks server
